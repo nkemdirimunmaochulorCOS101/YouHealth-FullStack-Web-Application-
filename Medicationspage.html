@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Medications</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General body styling for the full-screen background and font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Style for the status badge */
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-blue-900 text-gray-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="flex items-center justify-between max-w-7xl mx-auto px-4 py-2 md:px-6">
+            <div class="flex items-center space-x-2">
+                <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="h-10 w-10 rounded-xl">
+                <a href="YouHealthHomepage.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer drop-shadow-sm">YouHealth</a>
+            </div>
+            <nav class="hidden md:flex flex-1 justify-center space-x-8">
+                <a href="Healthdashboard.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Dashboard</a>
+                <a href="SearchPage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Search</a>
+                <a href="Appointmentspage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Appointments</a>
+                <a href="#Medicationspage.page" class="nav-link font-bold text-blue-900 hover:text-blue-900 transition duration-300 active">Medications</a>
+                <a href="Settings.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Settings</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <button class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105 text-sm hidden md:block">Sign Out</button>
+
+                <button id="mobile-menu-button" class="md:hidden text-gray-700 hover:text-blue-900 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg pb-4">
+            <nav class="flex flex-col items-center space-y-4 pt-2">
+                <a href="Healthdashboard.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Dashboard</a>
+                <a href="SearchPage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Search</a>
+                <a href="Appointmentspage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Appointments</a>
+                <a href="#Medicationspage.page" class="nav-link font-bold text-blue-900 hover:text-blue-900 transition duration-300 active">Medications</a>
+                <a href="Settings.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Settings</a>
+                <button class="w-2/3 px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105 text-sm">Sign Out</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 text-center">Your Medications</h2>
+
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+                <div class="relative w-full sm:w-1/2">
+                    <input type="text" id="medication-search" placeholder="Search for a medication..." class="w-full px-5 py-3 pr-12 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 text-gray-700 placeholder-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <button id="add-medication-button" class="w-full sm:w-auto px-6 py-3 rounded-full text-blue-900 font-semibold bg-white hover:bg-blue-700 transition duration-300 transform hover:scale-105 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                    Add New Medication
+                </button>
+            </div>
+            
+            <div id="message-box" class="fixed top-24 left-1/2 -translate-x-1/2 p-4 rounded-xl shadow-lg z-[100] transition-opacity duration-300 hidden opacity-0"></div>
+
+            <div id="medications-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+        </div>
+    </main>
+
+    <footer class="bg-white shadow-md mt-auto">
+        <div class="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto p-4 text-sm text-gray-600">
+            <div>© 2025 YouHealth</div>
+            <div class="mt-2 md:mt-0 flex space-x-4">
+                <span>Made simple</span>
+                <a href="#" class="hover:text-blue-600 transition duration-300">Privacy</a>
+                <a href="#" class="hover:text-blue-600 transition duration-300">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="add-medication-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden transition-opacity duration-300 opacity-0">
+        <div class="bg-white rounded-xl shadow-2xl p-8 max-w-lg w-full transform scale-95 transition-all duration-300 ease-in-out">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Add New Medication</h3>
+            <form id="add-medication-form" class="space-y-4">
+                <div>
+                    <label for="medication-name" class="block text-sm font-medium text-gray-700">Medication Name</label>
+                    <input type="text" id="medication-name" name="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2">
+                </div>
+                <div>
+                    <label for="medication-dosage" class="block text-sm font-medium text-gray-700">Dosage</label>
+                    <input type="text" id="medication-dosage" name="dosage" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2">
+                </div>
+                <div>
+                    <label for="medication-frequency" class="block text-sm font-medium text-gray-700">Frequency</label>
+                    <input type="text" id="medication-frequency" name="frequency" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2">
+                </div>
+                <div>
+                    <label for="medication-instructions" class="block text-sm font-medium text-gray-700">Instructions</label>
+                    <textarea id="medication-instructions" name="instructions" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"></textarea>
+                </div>
+                <div>
+                    <label for="medication-status" class="block text-sm font-medium text-gray-700">Status</label>
+                    <select id="medication-status" name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2">
+                        <option>Active</option>
+                        <option>Refill Needed</option>
+                        <option>Inactive</option>
+                    </select>
+                </div>
+                <div class="flex justify-end gap-3 pt-4">
+                    <button type="button" id="cancel-add-button" class="px-6 py-2 border border-gray-300 rounded-full text-gray-700 font-semibold hover:bg-gray-50 transition-colors duration-200">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-6 py-2 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-200">
+                        Save Medication
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const allMedications = [
+            { id: 1, name: "Ibuprofen", dosage: "200 mg", frequency: "Every 6 hours as needed", instructions: "Take with food to avoid stomach upset.", status: "Active" },
+            { id: 2, name: "Amoxicillin", dosage: "500 mg", frequency: "3 times a day", instructions: "Complete the full course of medication, even if you feel better.", status: "Active" },
+            { id: 3, name: "Lisinopril", dosage: "10 mg", frequency: "Once daily", instructions: "Take at the same time each day.", status: "Refill Needed" },
+            { id: 4, name: "Amlodipine", dosage: "5 mg", frequency: "Once daily", instructions: "Store in a cool, dry place.", status: "Active" },
+            { id: 5, name: "Metformin", dosage: "850 mg", frequency: "Twice daily", instructions: "Take with your morning and evening meals.", status: "Inactive" },
+            { id: 6, name: "Atorvastatin", dosage: "20 mg", frequency: "Once daily at bedtime", instructions: "Do not eat grapefruit or drink grapefruit juice while taking this medicine.", status: "Active" }
+        ];
+
+        function renderMedications(medications) {
+            const container = document.getElementById('medications-container');
+            container.innerHTML = '';
+            if (medications.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-8 col-span-full">No medications found matching your search.</p>';
+                return;
+            }
+            medications.forEach(medication => {
+                let statusClass = '';
+                if (medication.status === 'Active') {
+                    statusClass = 'bg-green-100 text-green-700';
+                } else if (medication.status === 'Refill Needed') {
+                    statusClass = 'bg-yellow-100 text-yellow-700';
+                } else if (medication.status === 'Inactive') {
+                    statusClass = 'bg-gray-100 text-gray-700';
+                }
+                const medicationCard = `
+                    <div class="bg-white rounded-xl shadow-md p-6 flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex-1">
+                                <h4 class="text-xl font-bold text-gray-900 mb-1">${medication.name}</h4>
+                                <div class="text-sm font-semibold text-gray-600 mb-1">
+                                    <span class="text-gray-500 font-normal">Dosage:</span> ${medication.dosage}
+                                </div>
+                                <div class="text-sm font-semibold text-gray-600">
+                                    <span class="text-gray-500 font-normal">Frequency:</span> ${medication.frequency}
+                                </div>
+                            </div>
+                            <span class="status-badge ${statusClass}">${medication.status}</span>
+                        </div>
+                        <div class="text-sm text-gray-500 mb-4">
+                            <span class="font-semibold text-gray-700">Instructions:</span> ${medication.instructions}
+                        </div>
+                        <div class="flex justify-end gap-2 mt-auto">
+                            <button class="text-sm text-blue-600 hover:text-blue-800 font-semibold transition-colors duration-200">
+                                View Details
+                            </button>
+                            <button class="text-sm text-red-600 hover:text-red-800 font-semibold transition-colors duration-200">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += medicationCard;
+            });
+        }
+
+        function handleSearch(searchTerm) {
+            const lowerCaseSearch = searchTerm.toLowerCase();
+            const filteredMedications = allMedications.filter(medication => {
+                const name = medication.name.toLowerCase();
+                const dosage = medication.dosage.toLowerCase();
+                const frequency = medication.frequency.toLowerCase();
+                return name.includes(lowerCaseSearch) || 
+                       dosage.includes(lowerCaseSearch) ||
+                       frequency.includes(lowerCaseSearch);
+            });
+            renderMedications(filteredMedications);
+        }
+
+        function showMessageBox(message, type) {
+            const msgBox = document.getElementById('message-box');
+            msgBox.textContent = message;
+            msgBox.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700');
+            msgBox.classList.add('opacity-100');
+            if (type === 'success') {
+                msgBox.classList.add('bg-green-100', 'text-green-700');
+            } else if (type === 'error') {
+                msgBox.classList.add('bg-red-100', 'text-red-700');
+            }
+            setTimeout(() => {
+                msgBox.classList.remove('opacity-100');
+                msgBox.classList.add('hidden');
+            }, 3000);
+        }
+        
+        const addMedicationButton = document.getElementById('add-medication-button');
+        const addMedicationModal = document.getElementById('add-medication-modal');
+        const cancelAddButton = document.getElementById('cancel-add-button');
+        const addMedicationForm = document.getElementById('add-medication-form');
+
+        function showAddModal() {
+            addMedicationModal.classList.remove('hidden');
+            setTimeout(() => {
+                addMedicationModal.classList.add('opacity-100');
+                addMedicationModal.querySelector('.transform').classList.remove('scale-95');
+            }, 10);
+        }
+
+        function hideAddModal() {
+            addMedicationModal.classList.remove('opacity-100');
+            addMedicationModal.querySelector('.transform').classList.add('scale-95');
+            setTimeout(() => {
+                addMedicationModal.classList.add('hidden');
+                addMedicationForm.reset();
+            }, 300);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('medication-search');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            renderMedications(allMedications);
+
+            searchInput.addEventListener('keyup', (event) => {
+                handleSearch(event.target.value);
+            });
+
+            addMedicationButton.addEventListener('click', showAddModal);
+
+            cancelAddButton.addEventListener('click', hideAddModal);
+
+            addMedicationForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const newMedication = {
+                    id: allMedications.length + 1,
+                    name: document.getElementById('medication-name').value.trim(),
+                    dosage: document.getElementById('medication-dosage').value.trim(),
+                    frequency: document.getElementById('medication-frequency').value.trim(),
+                    instructions: document.getElementById('medication-instructions').value.trim(),
+                    status: document.getElementById('medication-status').value
+                };
+
+                if (!newMedication.name || !newMedication.dosage || !newMedication.frequency) {
+                    showMessageBox("Please fill in all required fields.", "error");
+                    return;
+                }
+
+                allMedications.push(newMedication);
+                
+                renderMedications(allMedications);
+
+                hideAddModal();
+                showMessageBox("Medication added successfully!", "success");
+            });
+
+            // New: Event listener for the hamburger menu button
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Optional: Close mobile menu when a navigation link is clicked
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

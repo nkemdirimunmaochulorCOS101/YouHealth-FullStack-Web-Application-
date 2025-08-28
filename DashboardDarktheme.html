@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouHealth Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font for Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General body styling for the full-screen background and font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Active filter button styling */
+        .filter-button.active {
+            background-color: #1e40af; /* dark blue-800 */
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform: scale(1.05);
+        }
+
+        /* Styling for the active navigation link */
+        .nav-link.active {
+            font-weight: 700; /* Bold */
+            color: #93c5fd; /* a light blue for contrast */
+            border-bottom: 2px solid #93c5fd; /* Underline effect */
+            padding-bottom: 2px;
+        }
+
+        /* This class will hide the pages that are not active */
+        .page-content {
+            display: none;
+        }
+
+        /* This class will show the active page */
+        .page-content.active {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body class="bg-blue-950 text-white-100">
+
+    <!-- Header Section -->
+    <header class="bg-gray-900 shadow-sm sticky top-0 z-50">
+        <div class="flex items-center justify-between max-w-7xl mx-auto px-4 py-2 md:px-6">
+            <div class="flex items-center space-x-2">
+                <!-- Fallback image URL for logo to ensure it loads -->
+                <img src="https://placehold.co/40x40/1e40af/FFFFFF?text=YH" alt="YouHealth Logo" class="h-10 w-10 rounded-xl">
+                <h1 class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-300">YouHealth</h1>
+            </div>
+            <!-- Updated Navigation Links to match new color theme -->
+            <nav class="hidden md:flex flex-1 justify-center space-x-8">
+                <!-- 'Home' link is now visually active -->
+                <a href="#home-page" class="nav-link font-bold text-blue-300 hover:text-blue-200 transition duration-300 active">Home</a>
+                <a href="SearchPage.html" class="nav-link font-medium text-gray-400 hover:text-blue-300 transition duration-300">Search</a>
+                <a href="Appointmentspage.html" class="nav-link font-medium text-gray-400 hover:text-blue-300 transition duration-300">Appointments</a>
+                <a href="Medicationspage.html" class="nav-link font-medium text-gray-400 hover:text-blue-300 transition duration-300">Medications</a>
+                <a href="Settings.html" class="nav-link font-medium text-gray-400 hover:text-blue-300 transition duration-300">Settings</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <button class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-800 transition duration-300 transform hover:scale-105 text-sm">Sign Out</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content container for all pages -->
+    <div class="flex-1 p-4 md:p-8 overflow-y-auto">
+
+        <!-- Home Page Content (initial view) -->
+        <main id="home-page" class="page-content active max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Hello, Jane!</h2>
+
+            <!-- Appointment Overview Section -->
+            <div class="bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-semibold text-white">Appointment Overview</h3>
+                    <!-- Filter Buttons -->
+                    <div id="date-filters" class="flex space-x-2 sm:space-x-4">
+                        <button class="filter-button bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 active" data-filter="day">Day</button>
+                        <button class="filter-button bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300" data-filter="week">Week</button>
+                        <button class="filter-button bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300" data-filter="month">Month</button>
+                        <button class="filter-button bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300" data-filter="year">Year</button>
+                    </div>
+                </div>
+
+                <!-- Summary statistics (Now clickable) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <!-- Cards are now clickable and have data-filter attributes -->
+                    <div id="total-appointments-card" class="p-4 rounded-xl cursor-pointer hover:bg-blue-800 transition-colors duration-300 total-filter-button bg-blue-900 text-white" data-filter="all">
+                        <p class="text-sm font-medium">Total Appointments</p>
+                        <p class="text-2xl font-bold">14</p>
+                    </div>
+                    <div class="p-4 rounded-xl cursor-pointer hover:bg-green-600 transition-colors duration-300 total-filter-button bg-green-700 text-white" data-filter="Completed">
+                        <p class="text-sm font-medium">Completed</p>
+                        <p class="text-2xl font-bold">7</p>
+                    </div>
+                    <div class="p-4 rounded-xl cursor-pointer hover:bg-yellow-600 transition-colors duration-300 total-filter-button bg-yellow-700 text-white" data-filter="Upcoming">
+                        <p class="text-sm font-medium">Upcoming</p>
+                        <p class="text-2xl font-bold">7</p>
+                    </div>
+                    <div class="p-4 rounded-xl cursor-pointer hover:bg-red-600 transition-colors duration-300 total-filter-button bg-red-700 text-white" data-filter="Cancelled">
+                        <p class="text-sm font-medium">Cancelled</p>
+                        <p class="text-2xl font-bold">0</p>
+                    </div>
+                </div>
+
+                <!-- Appointments List -->
+                <div id="appointments-list" class="space-y-4">
+                    <!-- Appointments will be rendered here by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Other Dashboard Widgets (Optional) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-800 rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-white mb-4">Upcoming Prescriptions</h3>
+                    <ul class="space-y-2">
+                        <li class="p-3 bg-gray-700 rounded-lg flex items-center justify-between text-white">
+                            <span>Ibuprofen</span>
+                            <span class="text-sm text-gray-400">2 tablets, 2x daily</span>
+                        </li>
+                        <li class="p-3 bg-gray-700 rounded-lg flex items-center justify-between text-white">
+                            <span>Loratadine</span>
+                            <span class="text-sm text-gray-400">1 tablet, daily</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-800 rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-white mb-4">Health Vitals</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-purple-700 p-4 rounded-xl text-center text-white">
+                            <p class="text-xl font-bold">120/80</p>
+                            <p class="text-xs font-medium">Blood Pressure</p>
+                        </div>
+                        <div class="bg-teal-700 p-4 rounded-xl text-center text-white">
+                            <p class="text-xl font-bold">98%</p>
+                            <p class="text-xs font-medium">Oxygen Saturation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Appointments Page Content -->
+        <main id="appointments-page" class="page-content max-w-7xl mx-auto">
+            <div class="bg-gray-800 rounded-xl shadow-lg p-8 h-full">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Manage Your Appointments</h2>
+                <p class="text-gray-400">This section is for managing all of your appointments. You can view, schedule, and cancel appointments here.</p>
+            </div>
+        </main>
+
+        <!-- Medications Page Content -->
+        <main id="medications-page" class="page-content max-w-7xl mx-auto">
+            <div class="bg-gray-800 rounded-xl shadow-lg p-8 h-full">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Medication History & Prescriptions</h2>
+                <p class="text-gray-400">Here you can view your current and past medications, and manage your prescriptions.</p>
+            </div>
+        </main>
+
+        <!-- Settings Page Content -->
+        <main id="settings-page" class="page-content max-w-7xl mx-auto">
+            <div class="bg-gray-800 rounded-xl shadow-lg p-8 h-full">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Account Settings</h2>
+                <p class="text-gray-400">Manage your profile, security settings, and communication preferences here.</p>
+            </div>
+        </main>
+
+    </div>
+    
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 shadow-md mt-auto">
+        <div class="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto p-4 text-sm text-gray-400">
+            <div>© 2025 YouHealth</div>
+            <div class="mt-2 md:mt-0 flex space-x-4">
+                <span>Made simple</span>
+                <a href="#" class="hover:text-blue-300 transition duration-300">Privacy</a>
+                <a href="#" class="hover:text-blue-300 transition duration-300">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample data for appointments - updated to include more entries for different time periods
+        const allAppointments = [
+            // Old appointments
+            { id: 1, doctor: "Dr. Smith", specialty: "Cardiologist", date: "2024-07-25", time: "10:00 AM", status: "Upcoming" },
+            { id: 2, doctor: "Dr. Jones", specialty: "Dermatologist", date: "2024-07-26", time: "02:30 PM", status: "Upcoming" },
+            { id: 3, doctor: "Dr. Williams", specialty: "General Practitioner", date: "2024-07-28", time: "09:00 AM", status: "Upcoming" },
+            { id: 4, doctor: "Dr. Lee", specialty: "Pediatrician", date: "2024-06-20", time: "11:00 AM", status: "Completed" },
+            { id: 5, doctor: "Dr. Davis", specialty: "Orthopedist", date: "2024-05-15", time: "03:00 PM", status: "Completed" },
+            { id: 6, doctor: "Dr. Brown", specialty: "Neurologist", date: "2023-12-10", time: "04:00 PM", status: "Completed" },
+            { id: 7, doctor: "Dr. Wilson", specialty: "Ophthalmologist", date: "2024-08-01", time: "08:30 AM", status: "Upcoming" },
+            { id: 8, doctor: "Dr. Martinez", specialty: "Psychiatrist", date: "2024-08-05", time: "11:00 AM", status: "Upcoming" },
+            { id: 9, doctor: "Dr. Anderson", specialty: "Gynecologist", date: "2024-09-10", time: "10:00 AM", status: "Upcoming" },
+            // New appointments for a more populated calendar view
+            { id: 10, doctor: "Dr. Evans", specialty: "Podiatrist", date: "2024-07-27", time: "01:00 PM", status: "Upcoming" },
+            { id: 11, doctor: "Dr. Clark", specialty: "Physiotherapist", date: "2024-07-24", time: "04:00 PM", status: "Completed" },
+            { id: 12, doctor: "Dr. White", specialty: "Dentist", date: "2024-06-18", time: "02:00 PM", status: "Completed" },
+            { id: 13, doctor: "Dr. Hall", specialty: "ENT", date: "2024-04-10", time: "09:30 AM", status: "Completed" },
+            { id: 14, doctor: "Dr. King", specialty: "Allergist", date: "2023-11-20", time: "03:00 PM", status: "Completed" },
+        ];
+
+        // Function to dynamically generate appointments for the next 7 days, ensuring the "day" filter is always populated
+        function getDynamicAppointments() {
+            const dynamicAppointments = [];
+            const now = new Date();
+            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const doctors = ["Dr. Adams", "Dr. Baker", "Dr. Carter", "Dr. Evans", "Dr. Foster", "Dr. Garcia"];
+            const specialties = ["Optometrist", "Chiropractor", "Cardiologist", "Pediatrician", "Neurologist", "Dermatologist"];
+            const statuses = ["Upcoming", "Completed"];
+
+            // Create 3 appointments for each of the next 7 days
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(now);
+                date.setDate(now.getDate() + i);
+                const dateString = date.toISOString().split('T')[0];
+
+                for (let j = 0; j < 3; j++) {
+                    dynamicAppointments.push({
+                        id: `dyn-${i}-${j}`,
+                        doctor: doctors[j % doctors.length],
+                        specialty: specialties[j % specialties.length],
+                        date: dateString,
+                        time: `${9 + j}:00 AM`,
+                        status: i === 0 ? statuses[1] : statuses[0] // Make a few completed
+                    });
+                }
+            }
+            return dynamicAppointments;
+        }
+
+        const initialAppointments = allAppointments.concat(getDynamicAppointments());
+
+        // Function to render appointments based on the filter
+        function renderAppointments(filter) {
+            const container = document.getElementById('appointments-list');
+            if (!container) return; // Add a check to ensure container exists on the current page
+            container.innerHTML = ''; // Clear existing list
+            
+            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const today = new Date();
+            let filteredAppointments = [];
+
+            // Updated switch case to handle both date and status filters
+            switch (filter) {
+                case 'all':
+                    filteredAppointments = initialAppointments;
+                    break;
+                case 'day':
+                    // Logic to show a weekly overview grouped by day
+                    const now = new Date();
+                    for (let i = 0; i < 7; i++) {
+                        const date = new Date(now);
+                        date.setDate(now.getDate() + i);
+                        
+                        const appointmentsForDay = initialAppointments.filter(app => {
+                            const appDate = new Date(app.date);
+                            return appDate.getFullYear() === date.getFullYear() &&
+                                   appDate.getMonth() === date.getMonth() &&
+                                   appDate.getDate() === date.getDate();
+                        });
+
+                        if (appointmentsForDay.length > 0) {
+                            const dayHeader = `
+                                <div class="mt-6 mb-2">
+                                    <h4 class="text-lg font-semibold text-white">${dayNames[date.getDay()]}, ${date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</h4>
+                                </div>
+                            `;
+                            container.innerHTML += dayHeader;
+
+                            appointmentsForDay.forEach(app => {
+                                const statusColor = app.status === 'Completed' ? 'bg-green-700 text-white' : app.status === 'Upcoming' ? 'bg-blue-900 text-white' : 'bg-red-700 text-white';
+                                const appointmentItem = `
+                                    <div class="bg-gray-700 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between border border-gray-600">
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-blue-300">${app.doctor} - <span class="text-gray-400">${app.specialty}</span></h4>
+                                            <p class="text-gray-400 text-sm">Date: ${app.date} at ${app.time}</p>
+                                        </div>
+                                        <span class="mt-2 sm:mt-0 px-3 py-1 text-sm font-semibold rounded-full ${statusColor}">
+                                            ${app.status}
+                                        </span>
+                                    </div>
+                                `;
+                                container.innerHTML += appointmentItem;
+                            });
+                        }
+                    }
+                    if (container.innerHTML === '') {
+                        container.innerHTML = '<p class="text-center text-gray-400 py-8">No appointments found for the next 7 days.</p>';
+                    }
+                    return;
+                case 'week':
+                    // Logic to show appointments grouped by day for the current week
+                    const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+                    for (let i = 0; i < 7; i++) {
+                        const date = new Date(startOfWeek);
+                        date.setDate(startOfWeek.getDate() + i);
+                        
+                        const appointmentsForDay = initialAppointments.filter(app => {
+                            const appDate = new Date(app.date);
+                            return appDate.getFullYear() === date.getFullYear() &&
+                                   appDate.getMonth() === date.getMonth() &&
+                                   appDate.getDate() === date.getDate();
+                        });
+
+                        if (appointmentsForDay.length > 0) {
+                            const dayHeader = `
+                                <div class="mt-6 mb-2">
+                                    <h4 class="text-lg font-semibold text-white">${dayNames[date.getDay()]}, ${date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</h4>
+                                </div>
+                            `;
+                            container.innerHTML += dayHeader;
+                            appointmentsForDay.forEach(app => {
+                                const statusColor = app.status === 'Completed' ? 'bg-green-700 text-white' : app.status === 'Upcoming' ? 'bg-blue-900 text-white' : 'bg-red-700 text-white';
+                                const appointmentItem = `
+                                    <div class="bg-gray-700 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between border border-gray-600">
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-blue-300">${app.doctor} - <span class="text-gray-400">${app.specialty}</span></h4>
+                                            <p class="text-gray-400 text-sm">Date: ${app.date} at ${app.time}</p>
+                                        </div>
+                                        <span class="mt-2 sm:mt-0 px-3 py-1 text-sm font-semibold rounded-full ${statusColor}">
+                                            ${app.status}
+                                        </span>
+                                    </div>
+                                `;
+                                container.innerHTML += appointmentItem;
+                            });
+                        }
+                    }
+                    if (container.innerHTML === '') {
+                        container.innerHTML = '<p class="text-center text-gray-400 py-8">No appointments found for this week.</p>';
+                    }
+                    return;
+                case 'month':
+                    // Logic to show appointments grouped by day for the current month
+                    const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+                    for (let i = 1; i <= daysInMonth; i++) {
+                        const date = new Date(today.getFullYear(), today.getMonth(), i);
+                        
+                        const appointmentsForDay = initialAppointments.filter(app => {
+                            const appDate = new Date(app.date);
+                            return appDate.getFullYear() === date.getFullYear() &&
+                                   appDate.getMonth() === date.getMonth() &&
+                                   appDate.getDate() === date.getDate();
+                        });
+                        
+                        if (appointmentsForDay.length > 0) {
+                            const dayHeader = `
+                                <div class="mt-6 mb-2">
+                                    <h4 class="text-lg font-semibold text-white">${dayNames[date.getDay()]}, ${date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</h4>
+                                </div>
+                            `;
+                            container.innerHTML += dayHeader;
+                            appointmentsForDay.forEach(app => {
+                                const statusColor = app.status === 'Completed' ? 'bg-green-700 text-white' : app.status === 'Upcoming' ? 'bg-blue-900 text-white' : 'bg-red-700 text-white';
+                                const appointmentItem = `
+                                    <div class="bg-gray-700 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between border border-gray-600">
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-blue-300">${app.doctor} - <span class="text-gray-400">${app.specialty}</span></h4>
+                                            <p class="text-gray-400 text-sm">Date: ${app.date} at ${app.time}</p>
+                                        </div>
+                                        <span class="mt-2 sm:mt-0 px-3 py-1 text-sm font-semibold rounded-full ${statusColor}">
+                                            ${app.status}
+                                        </span>
+                                    </div>
+                                `;
+                                container.innerHTML += appointmentItem;
+                            });
+                        }
+                    }
+                    if (container.innerHTML === '') {
+                        container.innerHTML = '<p class="text-center text-gray-400 py-8">No appointments found for this month.</p>';
+                    }
+                    return;
+                case 'year':
+                    // Logic to show appointments grouped by month for the current year
+                    for (let i = 0; i < 12; i++) {
+                        const month = new Date(today.getFullYear(), i, 1);
+                        const appointmentsForMonth = initialAppointments.filter(app => {
+                            const appDate = new Date(app.date);
+                            return appDate.getFullYear() === month.getFullYear() &&
+                                   appDate.getMonth() === month.getMonth();
+                        });
+
+                        if (appointmentsForMonth.length > 0) {
+                            const monthHeader = `
+                                <div class="mt-6 mb-2">
+                                    <h4 class="text-lg font-semibold text-white">${monthNames[month.getMonth()]}, ${month.getFullYear()}</h4>
+                                </div>
+                            `;
+                            container.innerHTML += monthHeader;
+                            appointmentsForMonth.forEach(app => {
+                                const statusColor = app.status === 'Completed' ? 'bg-green-700 text-white' : app.status === 'Upcoming' ? 'bg-blue-900 text-white' : 'bg-red-700 text-white';
+                                const appointmentItem = `
+                                    <div class="bg-gray-700 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between border border-gray-600">
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-blue-300">${app.doctor} - <span class="text-gray-400">${app.specialty}</span></h4>
+                                            <p class="text-gray-400 text-sm">Date: ${app.date} at ${app.time}</p>
+                                        </div>
+                                        <span class="mt-2 sm:mt-0 px-3 py-1 text-sm font-semibold rounded-full ${statusColor}">
+                                            ${app.status}
+                                        </span>
+                                    </div>
+                                `;
+                                container.innerHTML += appointmentItem;
+                            });
+                        }
+                    }
+                    if (container.innerHTML === '') {
+                        container.innerHTML = '<p class="text-center text-gray-400 py-8">No appointments found for this year.</p>';
+                    }
+                    return;
+                case 'Completed':
+                    filteredAppointments = initialAppointments.filter(app => app.status === 'Completed');
+                    break;
+                case 'Upcoming':
+                    filteredAppointments = initialAppointments.filter(app => app.status === 'Upcoming');
+                    break;
+                case 'Cancelled':
+                    filteredAppointments = initialAppointments.filter(app => app.status === 'Cancelled');
+                    break;
+                default:
+                    filteredAppointments = initialAppointments;
+            }
+
+            if (filteredAppointments.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-400 py-8">No appointments found for this period.</p>';
+            } else {
+                filteredAppointments.forEach(app => {
+                    const statusColor = app.status === 'Completed' ? 'bg-green-700 text-white' : app.status === 'Upcoming' ? 'bg-blue-900 text-white' : 'bg-red-700 text-white';
+                    const appointmentItem = `
+                        <div class="bg-gray-700 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between border border-gray-600">
+                            <div>
+                                <h4 class="text-lg font-semibold text-blue-300">${app.doctor} - <span class="text-gray-400">${app.specialty}</span></h4>
+                                <p class="text-gray-400 text-sm">Date: ${app.date} at ${app.time}</p>
+                            </div>
+                            <span class="mt-2 sm:mt-0 px-3 py-1 text-sm font-semibold rounded-full ${statusColor}">
+                                ${app.status}
+                            </span>
+                        </div>
+                    `;
+                    container.innerHTML += appointmentItem;
+                });
+            }
+        }
+
+        // Event listeners for all filter buttons and navigation links
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateFilterButtons = document.querySelectorAll('#date-filters .filter-button');
+            const statusFilterButtons = document.querySelectorAll('.total-filter-button');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page-content');
+
+            // Function to handle page navigation
+            const navigateToPage = (targetId) => {
+                // Hide all pages
+                pages.forEach(page => page.classList.remove('active'));
+                
+                // Show the target page
+                const targetPage = document.getElementById(targetId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                }
+
+                // Update active navigation link styling
+                navLinks.forEach(link => {
+                    link.classList.remove('active', 'font-bold', 'text-blue-300');
+                    link.classList.add('font-medium', 'text-gray-400');
+                });
+                const activeLink = document.querySelector(`a[href="#${targetId}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active', 'font-bold', 'text-blue-300');
+                    activeLink.classList.remove('font-medium', 'text-gray-400');
+                }
+            };
+            
+            // Add click listeners to SPA navigation links, but exclude the 'Search' link
+            navLinks.forEach(link => {
+                if (link.getAttribute('href').startsWith('#')) {
+                    link.addEventListener('click', (event) => {
+                        event.preventDefault(); // Prevent default anchor behavior
+                        const targetId = link.getAttribute('href').substring(1); // Get the ID without the '#'
+                        navigateToPage(targetId);
+                    });
+                }
+            });
+
+            // Handle the URL hash to display the correct page on load
+            const initialHash = window.location.hash.substring(1) || 'home-page';
+            navigateToPage(initialHash);
+
+
+            // Function to handle click events on both filter buttons and the total appointments card
+            const handleFilterClick = (event) => {
+                // Remove active class from all date filter buttons
+                dateFilterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Remove active styling from all status cards
+                statusFilterButtons.forEach(card => {
+                    card.classList.remove('active', 'bg-blue-800', 'bg-green-600', 'bg-yellow-600', 'bg-red-600');
+                    card.classList.add(
+                        card.dataset.filter === 'all' ? 'bg-blue-900' :
+                        card.dataset.filter === 'Completed' ? 'bg-green-700' :
+                        card.dataset.filter === 'Upcoming' ? 'bg-yellow-700' :
+                        'bg-red-700'
+                    );
+                });
+                
+                const target = event.currentTarget;
+                const filter = target.dataset.filter;
+                
+                // Add active class to the clicked button/card and render appointments
+                if (target.classList.contains('filter-button')) {
+                    target.classList.add('active');
+                    // Reset status cards to their default colors when a date filter is clicked
+                    statusFilterButtons.forEach(card => {
+                        card.classList.remove('active');
+                        card.classList.add(
+                            card.dataset.filter === 'all' ? 'bg-blue-900' :
+                            card.dataset.filter === 'Completed' ? 'bg-green-700' :
+                            card.dataset.filter === 'Upcoming' ? 'bg-yellow-700' :
+                            'bg-red-700'
+                        );
+                    });
+                } else if (target.classList.contains('total-filter-button')) {
+                    dateFilterButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        if (btn.dataset.filter === 'day') {
+                            btn.classList.add('active');
+                        }
+                    });
+                    
+                    target.classList.add('active');
+                    if (target.dataset.filter === 'all') {
+                        target.classList.remove('bg-blue-900');
+                        target.classList.add('bg-blue-800');
+                    } else if (target.dataset.filter === 'Completed') {
+                        target.classList.remove('bg-green-700');
+                        target.classList.add('bg-green-600');
+                    } else if (target.dataset.filter === 'Upcoming') {
+                        target.classList.remove('bg-yellow-700');
+                        target.classList.add('bg-yellow-600');
+                    } else if (target.dataset.filter === 'Cancelled') {
+                        target.classList.remove('bg-red-700');
+                        target.classList.add('bg-red-600');
+                    }
+                }
+
+                renderAppointments(filter);
+            };
+
+            // Initial render on page load
+            renderAppointments('day');
+
+            dateFilterButtons.forEach(btn => btn.addEventListener('click', handleFilterClick));
+            statusFilterButtons.forEach(card => card.addEventListener('click', handleFilterClick));
+        });
+    </script>
+</body>
+</html>

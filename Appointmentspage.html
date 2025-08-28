@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Appointments</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General body styling for the full-screen background and font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Style for the status badge */
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+        /* Modal overlay for the booking form */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            max-height: 90vh;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-blue-900 text-gray-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="flex items-center justify-between max-w-7xl mx-auto px-4 py-2 md:px-6">
+            <div class="flex items-center space-x-2">
+                <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="h-10 w-10 rounded-xl">
+                <a href="YouHealthHomepage.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer drop-shadow-sm">YouHealth</a>
+            </div>
+            <nav class="hidden md:flex flex-1 justify-center space-x-8">
+                <a href="Healthdashboard.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Dashboard</a>
+                <a href="SearchPage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Search</a>
+                <a href="£Appointmentspage.page" class="nav-link font-bold text-blue-900 hover:text-blue-900 transition duration-300 active">Appointments</a>
+                <a href="Medicationspage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Medications</a>
+                <a href="Settings.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Settings</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <button class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105 text-sm hidden md:block">Sign Out</button>
+
+                <button id="mobile-menu-button" class="md:hidden text-gray-700 hover:text-blue-900 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg pb-4">
+            <nav class="flex flex-col items-center space-y-4 pt-2">
+                <a href="Healthdashboard.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Dashboard</a>
+                <a href="SearchPage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Search</a>
+                <a href="#Appointmentspage" class="nav-link font-bold text-blue-900 hover:text-blue-900 transition duration-300 active">Appointments</a>
+                <a href="Medicationspage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Medications</a>
+                <a href="Settings.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Settings</a>
+                <button class="w-2/3 px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105 text-sm">Sign Out</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 text-center">Appointments Overview</h2>
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+                <div class="relative w-full sm:w-1/2">
+                    <input type="text" id="appointment-search" placeholder="Search for an appointment..." class="w-full px-5 py-3 pr-12 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 text-gray-700 placeholder-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <button id="book-new-appointment-btn" class="w-full sm:w-auto px-6 py-3 rounded-full text-blue-900 font-semibold bg-white hover:bg-blue-700 transition duration-300 transform hover:scale-105 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                    Book a New Appointment
+                </button>
+            </div>
+            <div id="appointments-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            </div>
+        </div>
+    </main>
+
+    <div id="booking-modal" class="modal-overlay hidden opacity-0 transition-opacity duration-300">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl p-6 md:p-8 w-11/12 max-w-lg mx-4 overflow-y-auto transform scale-95 opacity-0 transition-all duration-300">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-900">Book a New Appointment</h3>
+                <button id="close-modal-btn" class="text-gray-500 hover:text-gray-800 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <form id="booking-form" class="space-y-4">
+                <div>
+                    <label for="doctor-select" class="block text-sm font-medium text-gray-700 mb-1">Select a Doctor</label>
+                    <select id="doctor-select" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </select>
+                </div>
+                <div>
+                    <label for="appointment-date" class="block text-sm font-medium text-gray-700 mb-1">Appointment Date</label>
+                    <input type="date" id="appointment-date" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label for="appointment-time" class="block text-sm font-medium text-gray-700 mb-1">Appointment Time</label>
+                    <input type="time" id="appointment-time" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label for="appointment-type" class="block text-sm font-medium text-gray-700 mb-1">Appointment Type</label>
+                    <select id="appointment-type" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="In-person">In-person</option>
+                        <option value="Telehealth">Telehealth</option>
+                    </select>
+                </div>
+                
+                <div class="mt-6">
+                    <button type="submit" class="w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
+                        Confirm Appointment
+                    </button>
+                </div>
+            </form>
+            <div id="confirmation-box" class="hidden mt-6 p-4 rounded-lg bg-green-100 text-green-700 text-sm font-semibold text-center">
+                Appointment booked successfully!
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white shadow-md mt-auto">
+        <div class="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto p-4 text-sm text-gray-600">
+            <div>© 2025 YouHealth</div>
+            <div class="mt-2 md:mt-0 flex space-x-4">
+                <span>Made simple</span>
+                <a href="#" class="hover:text-blue-600 transition duration-300">Privacy</a>
+                <a href="#" class="hover:text-blue-600 transition duration-300">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let allAppointments = [
+            { id: 1, doctorName: "Dr. Sarah Chen", specialty: "Cardiologist", date: "2025-08-25", time: "10:30 AM", type: "In-person", status: "Confirmed" },
+            { id: 2, doctorName: "Dr. Ben Carter", specialty: "Dermatologist", date: "2025-09-02", time: "2:00 PM", type: "Telehealth", status: "Confirmed" },
+            { id: 3, doctorName: "Dr. Evelyn Reed", specialty: "Pediatrician", date: "2025-07-15", time: "11:00 AM", type: "In-person", status: "Completed" },
+            { id: 4, doctorName: "Dr. Maria Lopez", specialty: "Neurologist", date: "2025-08-18", time: "3:00 PM", type: "Telehealth", status: "Canceled" },
+            { id: 5, doctorName: "Dr. John Williams", specialty: "General Practitioner", date: "2025-09-05", time: "9:00 AM", type: "In-person", status: "Confirmed" },
+            { id: 6, doctorName: "Dr. Lisa Evans", specialty: "Ophthalmologist", date: "2025-08-28", time: "4:00 PM", type: "In-person", status: "Confirmed" }
+        ];
+
+        const allDoctors = [
+            { id: 1, name: "Dr. Sarah Chen", specialty: "Cardiologist", experience: "15 years", hospital: "City General Hospital", rating: 4.8 },
+            { id: 2, name: "Dr. Ben Carter", specialty: "Dermatologist", experience: "8 years", hospital: "Dermatology & Skin Clinic", rating: 4.5 },
+            { id: 3, name: "Dr. Evelyn Reed", specialty: "Pediatrician", experience: "20 years", hospital: "Children's Health Center", rating: 4.9 },
+            { id: 4, name: "Dr. Alex Rodriguez", specialty: "Orthopedist", experience: "12 years", hospital: "Orthopedic & Sports Medicine", rating: 4.7 },
+            { id: 5, name: "Dr. Maria Lopez", specialty: "Neurologist", experience: "18 years", hospital: "Neurocare Institute", rating: 4.6 },
+            { id: 6, name: "Dr. John Williams", specialty: "General Practitioner", experience: "10 years", hospital: "Family Wellness Clinic", rating: 4.9 },
+            { id: 7, name: "Dr. Lisa Evans", specialty: "Ophthalmologist", experience: "9 years", hospital: "Vision Care Center", rating: 4.5 },
+            { id: 8, name: "Dr. Mark Jensen", specialty: "Psychiatrist", experience: "14 years", hospital: "Mental Health Partners", rating: 4.8 },
+            { id: 9, name: "Dr. Fatima Khan", specialty: "Gynecologist", experience: "11 years", hospital: "Women's Health Clinic", rating: 4.7 }
+        ];
+
+        function renderAppointments(appointments) {
+            const container = document.getElementById('appointments-container');
+            container.innerHTML = '';
+            if (appointments.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-8 col-span-full">No appointments found.</p>';
+                return;
+            }
+            appointments.forEach(appointment => {
+                let statusClass = '';
+                if (appointment.status === 'Confirmed') {
+                    statusClass = 'bg-green-100 text-green-700';
+                } else if (appointment.status === 'Completed') {
+                    statusClass = 'bg-blue-100 text-blue-700';
+                } else if (appointment.status === 'Canceled') {
+                    statusClass = 'bg-red-100 text-red-700';
+                }
+                const appointmentCard = `
+                    <div class="bg-white rounded-xl shadow-md p-6 flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-bold text-gray-900">${appointment.doctorName}</h4>
+                            <span class="status-badge ${statusClass}">${appointment.status}</span>
+                        </div>
+                        <div class="text-sm text-gray-600 mb-2">
+                            <span class="font-semibold text-gray-800">Specialty:</span> ${appointment.specialty}
+                        </div>
+                        <div class="text-sm text-gray-600 mb-2">
+                            <span class="font-semibold text-gray-800">Date:</span> ${new Date(appointment.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                        </div>
+                        <div class="text-sm text-gray-600 mb-2">
+                            <span class="font-semibold text-gray-800">Time:</span> ${appointment.time}
+                        </div>
+                        <div class="text-sm text-gray-600 mb-4">
+                            <span class="font-semibold text-gray-800">Type:</span> ${appointment.type}
+                        </div>
+                        <div class="flex justify-end gap-2 mt-auto">
+                            <button class="text-sm text-blue-600 hover:text-blue-800 font-semibold transition-colors duration-200">
+                                View Details
+                            </button>
+                            ${appointment.status === 'Confirmed' ? `
+                                <button class="text-sm text-red-600 hover:text-red-800 font-semibold transition-colors duration-200">
+                                    Cancel
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += appointmentCard;
+            });
+        }
+
+        function populateDoctorDropdown() {
+            const selectElement = document.getElementById('doctor-select');
+            selectElement.innerHTML = '<option value="">-- Select a Doctor --</option>';
+            allDoctors.forEach(doctor => {
+                const option = document.createElement('option');
+                option.value = doctor.id;
+                option.textContent = `${doctor.name} - ${doctor.specialty}`;
+                selectElement.appendChild(option);
+            });
+        }
+
+        function showBookingModal() {
+            const modal = document.getElementById('booking-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.add('opacity-100');
+                modal.querySelector('.modal-content').classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        }
+
+        function hideBookingModal() {
+            const modal = document.getElementById('booking-modal');
+            modal.classList.add('opacity-0');
+            modal.querySelector('.modal-content').classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.getElementById('booking-form').reset();
+                document.getElementById('confirmation-box').classList.add('hidden');
+            }, 300);
+        }
+
+        function handleSearch(searchTerm) {
+            const lowerCaseSearch = searchTerm.toLowerCase();
+            const filteredAppointments = allAppointments.filter(appointment => {
+                const doctorName = appointment.doctorName.toLowerCase();
+                const specialty = appointment.specialty.toLowerCase();
+                const date = appointment.date.toLowerCase();
+                const status = appointment.status.toLowerCase();
+
+                return doctorName.includes(lowerCaseSearch) || 
+                       specialty.includes(lowerCaseSearch) ||
+                       date.includes(lowerCaseSearch) ||
+                       status.includes(lowerCaseSearch);
+            });
+            
+            renderAppointments(filteredAppointments);
+        }
+
+        function handleBookingSubmit(event) {
+            event.preventDefault();
+
+            const doctorSelect = document.getElementById('doctor-select');
+            const appointmentDate = document.getElementById('appointment-date');
+            const appointmentTime = document.getElementById('appointment-time');
+            const appointmentType = document.getElementById('appointment-type');
+
+            const selectedDoctor = allDoctors.find(doc => doc.id == doctorSelect.value);
+
+            if (selectedDoctor) {
+                const newAppointment = {
+                    id: allAppointments.length + 1,
+                    doctorName: selectedDoctor.name,
+                    specialty: selectedDoctor.specialty,
+                    date: appointmentDate.value,
+                    time: appointmentTime.value,
+                    type: appointmentType.value,
+                    status: "Confirmed"
+                };
+
+                allAppointments.push(newAppointment);
+
+                const confirmationBox = document.getElementById('confirmation-box');
+                confirmationBox.classList.remove('hidden');
+                
+                renderAppointments(allAppointments);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('appointment-search');
+            const bookBtn = document.getElementById('book-new-appointment-btn');
+            const bookingModal = document.getElementById('booking-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const bookingForm = document.getElementById('booking-form');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            renderAppointments(allAppointments);
+            populateDoctorDropdown();
+
+            searchInput.addEventListener('keyup', (event) => {
+                handleSearch(event.target.value);
+            });
+            
+            bookBtn.addEventListener('click', showBookingModal);
+            
+            closeModalBtn.addEventListener('click', hideBookingModal);
+
+            bookingForm.addEventListener('submit', handleBookingSubmit);
+            
+            bookingModal.addEventListener('click', (event) => {
+                if (event.target === event.currentTarget) {
+                    hideBookingModal();
+                }
+            });
+
+            // New: Event listener for the hamburger menu button
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Optional: Close mobile menu when a navigation link is clicked
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

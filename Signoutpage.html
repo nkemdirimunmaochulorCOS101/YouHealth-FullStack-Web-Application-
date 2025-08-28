@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouHealth Sign Out</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font for Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General body styling for the full-screen background and font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Prevent scrollbar from animation */
+        }
+        
+        /* Custom animation for the content card */
+        .content-card {
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-blue-900 text-gray-800">
+
+    <!-- Header Section (Replicated from the Search and Settings pages) -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="flex items-center justify-between max-w-7xl mx-auto px-4 py-2 md:px-6">
+            <div class="flex items-center space-x-2">
+                <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="h-10 w-10 rounded-xl">
+                <h1 class="text-xl md:text-2xl font-extrabold tracking-wide text-gray-800">YouHealth</h1>
+            </div>
+            <!-- Navigation links are hidden on this page as the user is signed out -->
+            <div class="flex items-center space-x-4">
+                <!-- Sign in button replaces the sign out button -->
+                <a href="#" class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-600 hover:bg-blue-700 transition duration-300 transform hover:scale-105 text-sm">Sign In</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content for the Sign Out Page -->
+    <main class="flex-1 flex items-center justify-center p-4 md:p-8 overflow-y-auto">
+        <div class="max-w-xl mx-auto text-center w-full">
+            <!-- Central Card with Animation -->
+            <div class="bg-white rounded-xl shadow-lg p-8 md:p-12 w-full content-card">
+                <!-- Icon for successful action -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 mx-auto text-green-500 mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">You have been signed out.</h2>
+                <p class="text-lg text-gray-500 mb-6">Your session has been securely ended.</p>
+                <a href="YouHealthHomepage.html" class="inline-block w-full md:w-auto py-3 px-6 rounded-full text-white font-semibold bg-blue-600 hover:bg-blue-700 transition duration-300 transform hover:scale-105">Return to Home</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section (Replicated from other pages) -->
+    <footer class="bg-white shadow-md mt-auto">
+        <div class="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto p-4 text-sm text-gray-600">
+            <div>© 2025 YouHealth</div>
+            <div class="mt-2 md:mt-0 flex space-x-4">
+                <span>Made simple</span>
+                <a href="#" class="hover:text-blue-600 transition duration-300">Privacy</a>
+                <a href="#" class="hover:text-blue-600 transition duration-300">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

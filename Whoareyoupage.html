@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font for Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General body styling for the full-screen image and flexbox layout */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('5494d691-c601-437a-9d3e-909caf58f1d8.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            overflow-x: hidden;
+            /* Use flexbox to push the main content to the center and the footer to the bottom */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        /* Overlay for better text readability */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Darker semi-transparent overlay */
+            z-index: -1;
+        }
+
+        /* Keyframe animation for the card sliding in from the right */
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Apply the slide-in animation to the main card */
+        .slide-in-card {
+            animation: slideInRight 1s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="bg-white shadow-md">
+        <!-- Changed padding classes to make the header shorter -->
+        <div class="flex items-center justify-between max-w-7xl mx-auto p-1 md:p-2">
+            <div class="flex items-center space-x-2">
+                <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="h-8 w-8 rounded-xl drop-shadow-lg">
+                <h1 class="text-2xl font-extrabold tracking-wide text-blue-900 drop-shadow-lg">YouHealth</h1>
+            </div>
+            <nav class="hidden md:flex flex-1 justify-center space-x-6">
+                <a href="#" class="font-medium text-gray-900 hover:text-blue-900 transition duration-300">Home</a>
+                <a href="#" class="font-medium text-gray-900 hover:text-blue-900 transition duration-300">About Us</a>
+                <a href="#" class="font-medium text-gray-900 hover:text-blue-900 transition duration-300">Services</a>
+                <a href="#" class="font-medium text-gray-900 hover:text-blue-900 transition duration-300">Contact</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <button class="px-4 py-2 rounded-full text-white font-semibold bg-blue-900 shadow-xl hover:bg-blue-700 transition duration-300 transform hover:scale-105 text-sm">Sign Up</button>
+                <button class="px-4 py-2 rounded-full text-white font-semibold bg-blue-900 shadow-xl hover:bg-blue-700 transition duration-300 transform hover:scale-105 text-sm">Log In</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content for the "Who are you?" card, flex-1 ensures it takes up available space -->
+    <main class="flex-1 flex items-center justify-center p-4">
+        <div class="max-w-md w-full">
+
+            <!-- Create an account card with slide-in animation -->
+            <div class="bg-gray-300 rounded-xl shadow-2xl p-8 slide-in-card">
+                <h3 class="text-2xl font-semibold text-center text-gray-800 mb-6">Who are you?</h3>
+                <form class="space-y-5">
+                    <a href="SignUppageformedicalpractitioner.html" 
+                       class="w-full py-2.5 px-4 rounded-lg bg-blue-900 text-white font-semibold hover:bg-blue-700 transition duration-300 inline-block text-center">
+                       Medical Practitioner
+                       </a>
+                    <a href="SignUppageforpatient.html" 
+                       class="w-full py-2.5 px-4 rounded-lg bg-blue-900 text-white font-semibold hover:bg-blue-700 transition duration-300 inline-block text-center">
+                       Patient
+                       </a>  
+                </form>
+                <div class="text-center mt-6 text-sm">
+                    <p class="text-gray-600">Already have an account? <a href="Loginpage.html" class="text-blue-600 hover:underline">Login</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-white shadow-md mt-auto">
+        <div class="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto p-4 text-sm text-gray-600">
+            <div>© 2025 YouHealth</div>
+            <div class="mt-2 md:mt-0 flex space-x-4">
+                <span>Made simple</span>
+                <a href="#" class="hover:text-blue-600 transition duration-300">Privacy</a>
+                <a href="#" class="hover:text-blue-600 transition duration-300">Contact</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

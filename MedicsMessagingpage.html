@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            @apply bg-gray-100 text-gray-900;
+        }
+
+        /* Custom scrollbar for the conversation and message panels */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #e5e7eb;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #6b7280;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
+        }
+    </style>
+</head>
+<body class="p-0">
+
+    <div class="min-h-screen flex flex-col">
+        <header class="bg-white shadow-sm sticky top-0 z-50">
+            <div class="flex items-center justify-between max-w-7xl mx-auto px-4 py-2 md:px-6">
+                <div class="flex items-center space-x-2">
+                    <div class="flex items-center space-x-2">
+                        <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="h-10 w-10 rounded-xl">
+                        <a href="YouHealthHomepage.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer">YouHealth</a>
+                    </div>
+                </div>
+                <nav class="hidden md:flex flex-1 justify-center space-x-8">
+                    <a href="MedicsDashboard.html" class="nav-link font-medium text-gray-600 hover:text-blue-500 transition duration-300">Dashboard</a>
+                    <a href="Medicspatientpage.html" class="nav-link font-medium text-gray-600 hover:text-blue-500 transition duration-300">Patients</a>
+                    <a href="MedicsSchedulepage.html" class="nav-link font-medium text-gray-600 hover:text-blue-500 transition duration-300">Schedule</a>
+                    <a href="#" class="nav-link font-bold text-blue-900 hover:text-blue-900 transition duration-300">Messages</a>
+                    <a href="MedicsSettingspage.html" class="nav-link font-medium text-gray-600 hover:text-blue-500 transition duration-300">Settings</a>
+                </nav>
+                <div class="flex items-center space-x-4">
+                    <button class="hidden md:block px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-700 transition duration-300 transform hover:scale-105 text-sm">Sign Out</button>
+                    <button id="hamburger-btn" class="md:hidden text-gray-600 hover:text-blue-900 transition duration-300">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div id="mobile-menu" class="hidden md:hidden absolute top-16 left-0 w-full bg-white shadow-lg z-40">
+            <nav class="flex flex-col items-center py-4 space-y-4">
+                <a href="MedicsDashboard.html" class="nav-link text-lg font-medium text-gray-600 hover:text-blue-900 transition duration-300">Dashboard</a>
+                <a href="Medicspatientpage.html" class="nav-link text-lg font-medium text-gray-600 hover:text-blue-900 transition duration-300">Patients</a>
+                <a href="MedicsSchedulepage.html" class="nav-link text-lg font-medium text-gray-600 hover:text-blue-900 transition duration-300">Schedule</a>
+                <a href="#" class="nav-link text-lg font-bold text-blue-900 hover:text-blue-900 transition duration-300">Messages</a>
+                <a href="MedicsSettingspage.html" class="nav-link text-lg font-medium text-gray-600 hover:text-blue-900 transition duration-300">Settings</a>
+                <button class="w-full text-center text-lg font-medium py-2 px-4 rounded-full text-white bg-blue-900 hover:bg-blue-700 transition duration-300 mt-4">Sign Out</button>
+            </nav>
+        </div>
+
+        <main class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8 p-6 md:p-8 lg:p-12 bg-blue-900 text-gray-100">
+
+            <aside class="lg:col-span-1 bg-white rounded-2xl shadow-xl p-4 flex flex-col">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Messages</h2>
+                <div id="conversations-list" class="space-y-2 overflow-y-auto custom-scrollbar flex-grow">
+                    </div>
+            </aside>
+
+            <section class="lg:col-span-2 bg-white rounded-2xl shadow-xl flex flex-col">
+                <div id="chat-header" class="bg-gray-100 px-6 py-4 rounded-t-2xl border-b border-gray-200">
+                    <p class="text-gray-500 text-center font-medium">Select a conversation to begin</p>
+                </div>
+
+                <div id="chat-messages" class="flex-grow p-6 space-y-4 overflow-y-auto custom-scrollbar">
+                    </div>
+
+                <div class="p-4 border-t border-gray-200 flex items-center gap-2">
+                    <input type="text" id="message-input" placeholder="Type a message..." class="flex-grow p-3 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:border-blue-500 transition-colors duration-200 text-gray-900" disabled>
+                    <button id="send-button" class="bg-blue-900 text-white p-3 rounded-full hover:bg-blue-700 transition-colors duration-200 transform hover:scale-105" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="bg-white shadow-md mt-auto">
+            <div class="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto p-4 text-sm text-gray-600">
+                <div>&copy; 2025 YouHealth</div>
+                <div class="mt-2 md:mt-0 flex space-x-4">
+                    <span>Made simple</span>
+                    <a href="#" class="hover:text-blue-500 transition duration-300">Privacy</a>
+                    <a href="#" class="hover:text-blue-500 transition duration-300">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const conversationsList = document.getElementById('conversations-list');
+            const chatHeader = document.getElementById('chat-header');
+            const chatMessages = document.getElementById('chat-messages');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-button');
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            // Dummy data for conversations and messages
+            const conversations = {
+                'patient-jane-doe': {
+                    name: 'Jane Doe',
+                    avatar: 'https://placehold.co/40x40/E2E8F0/1A202C?text=JD',
+                    messages: [
+                        { text: "Hi Dr. Smith, just wanted to confirm my appointment for tomorrow.", sender: 'patient' },
+                        { text: "Hello Jane, yes, your appointment is confirmed for 9 AM. I look forward to seeing you.", sender: 'me' },
+                        { text: "Great, thank you!", sender: 'patient' }
+                    ]
+                },
+                'patient-john-smith': {
+                    name: 'John Smith',
+                    avatar: 'https://placehold.co/40x40/E2E8F0/1A202C?text=JS',
+                    messages: [
+                        { text: "My blood pressure reading is 135/85 this morning. Should I be concerned?", sender: 'patient' },
+                        { text: "That's a bit high, but let's monitor it. Are you experiencing any headaches or dizziness?", sender: 'me' }
+                    ]
+                },
+                'patient-emily-white': {
+                    name: 'Emily White',
+                    avatar: 'https://placehold.co/40x40/E2E8F0/1A202C?text=EW',
+                    messages: [
+                        { text: "Just a quick question about my prescription refill. Is it ready for pickup?", sender: 'patient' },
+                        { text: "Yes, Emily. The prescription has been sent to the pharmacy and should be ready for you to pick up.", sender: 'me' }
+                    ]
+                }
+            };
+
+            let activeChatId = null;
+
+            // Function to render the conversation list
+            function renderConversations() {
+                conversationsList.innerHTML = '';
+                Object.keys(conversations).forEach(id => {
+                    const conversation = conversations[id];
+                    const lastMessage = conversation.messages[conversation.messages.length - 1];
+
+                    const conversationItem = document.createElement('div');
+                    conversationItem.classList.add(
+                        'flex', 'items-center', 'gap-4', 'p-4', 'rounded-xl', 'cursor-pointer',
+                        'hover:bg-gray-100', 'transition-colors', 'duration-200'
+                    );
+                    if (id === activeChatId) {
+                        conversationItem.classList.add('bg-gray-100');
+                    }
+
+                    conversationItem.dataset.id = id;
+                    conversationItem.innerHTML = `
+                        <img src="${conversation.avatar}" alt="${conversation.name}" class="w-10 h-10 rounded-full">
+                        <div class="flex-grow">
+                            <h3 class="font-semibold text-gray-900">${conversation.name}</h3>
+                            <p class="text-sm text-gray-500 truncate">${lastMessage.text}</p>
+                        </div>
+                    `;
+
+                    conversationItem.addEventListener('click', () => {
+                        activeChatId = id;
+                        renderConversations();
+                        renderMessages();
+                    });
+
+                    conversationsList.appendChild(conversationItem);
+                });
+            }
+
+            // Function to render messages for the active conversation
+            function renderMessages() {
+                if (!activeChatId) return;
+
+                const conversation = conversations[activeChatId];
+                chatHeader.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <img src="${conversation.avatar}" alt="${conversation.name}" class="w-10 h-10 rounded-full">
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">${conversation.name}</h3>
+                            <p class="text-sm text-gray-500">Active now</p>
+                        </div>
+                    </div>
+                `;
+
+                chatMessages.innerHTML = '';
+                conversation.messages.forEach(msg => {
+                    const messageBubble = document.createElement('div');
+                    const isMyMessage = msg.sender === 'me';
+
+                    messageBubble.classList.add(
+                        'p-3', 'rounded-xl', 'max-w-xs', 'md:max-w-sm', 'break-words',
+                        isMyMessage ? 'bg-blue-600 text-white ml-auto rounded-br-none' : 'bg-gray-200 text-gray-900 mr-auto rounded-bl-none'
+                    );
+                    messageBubble.textContent = msg.text;
+                    chatMessages.appendChild(messageBubble);
+                });
+
+                // Scroll to the bottom of the message list
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // Enable input and send button
+                messageInput.disabled = false;
+                sendButton.disabled = false;
+            }
+
+            // Function to handle sending a new message
+            function sendMessage() {
+                const messageText = messageInput.value.trim();
+                if (messageText === '' || !activeChatId) {
+                    return;
+                }
+
+                const conversation = conversations[activeChatId];
+                conversation.messages.push({
+                    text: messageText,
+                    sender: 'me'
+                });
+
+                messageInput.value = '';
+                renderMessages();
+                renderConversations();
+            }
+
+            // Event listener for the send button
+            sendButton.addEventListener('click', sendMessage);
+
+            // Event listener for the enter key on the input field
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // Toggle mobile menu visibility
+            hamburgerBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Initial rendering
+            renderConversations();
+        });
+    </script>
+</body>
+</html>
