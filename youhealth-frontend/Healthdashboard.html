@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YouHealth Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f3f4f6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .filter-button.active, .total-filter-button.active {
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      border: 2px solid #1e3a8a;
+    }
+    .nav-link.active {
+      font-weight: 700;
+      color: darkblue;
+      border-bottom: 2px solid darkblue;
+      padding-bottom: 2px;
+    }
+    .page-content { display: none; }
+    .page-content.active { display: flex; flex-direction: column; flex-grow: 1; }
+  </style>
+</head>
+<body class="bg-blue-900 text-white-100">
+
+  <!-- Header -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="flex items-center justify-between max-w-7xl mx-auto px-4 py-2 md:px-6">
+      <div class="flex items-center space-x-2">
+        <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="h-10 w-10 rounded-xl"/>
+        <a href="YouHealthHomepage.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer drop-shadow-sm">YouHealth</a>
+      </div>
+      <nav class="hidden md:flex flex-1 justify-center space-x-8">
+        <a href="#home-page" class="nav-link font-bold text-blue-900 active">Dashboard</a>
+        <a href="SearchPage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900">Search</a>
+        <a href="Appointmentspage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900">Appointments</a>
+        <a href="Medicationspage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900">Medications</a>
+        <a href="Settings.html" class="nav-link font-medium text-gray-600 hover:text-blue-900">Settings</a>
+      </nav>
+      <div class="flex items-center space-x-4">
+        <a href="YouHealthHomepage.html" 
+   class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105 text-sm hidden md:block">
+   Log Out
+</a>
+
+        <button id="mobile-menu-button" class="md:hidden text-gray-700 hover:text-blue-900">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <nav id="mobile-menu" class="hidden md:hidden bg-white shadow-md">
+      <a href="#home-page" class="block px-4 py-2 nav-link font-bold text-blue-900">Dashboard</a>
+      <a href="SearchPage.html" class="block px-4 py-2 nav-link font-medium text-gray-600 hover:text-blue-900">Search</a>
+      <a href="Appointmentspage.html" class="block px-4 py-2 nav-link font-medium text-gray-600 hover:text-blue-900">Appointments</a>
+      <a href="Medicationspage.html" class="block px-4 py-2 nav-link font-medium text-gray-600 hover:text-blue-900">Medications</a>
+      <a href="Settings.html" class="block px-4 py-2 nav-link font-medium text-gray-600 hover:text-blue-900">Settings</a>
+      <a href="YouHealthHomepage.html" 
+   class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105 text-sm hidden md:block">
+   Log Out
+</a>
+
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <div class="flex-1 p-4 md:p-8 overflow-y-auto">
+    <main id="home-page" class="page-content active max-w-7xl mx-auto">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Hello, User!</h2>
+
+      <!-- Appointment Overview -->
+      <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <div class="flex items-center justify-between mb-4 flex-wrap">
+          <h3 class="text-xl font-semibold text-gray-900">Appointment Overview</h3>
+          <div id="date-filters" class="flex flex-wrap space-x-2 md:space-x-4 mt-2 md:mt-0">
+            <button class="filter-button bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-blue-100" data-filter="day">Day</button>
+            <button class="filter-button bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-blue-100" data-filter="week">Week</button>
+            <button class="filter-button bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-blue-100" data-filter="month">Month</button>
+            <button class="filter-button bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-blue-100" data-filter="year">Year</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div id="total-appointments-card" class="p-4 rounded-xl cursor-pointer total-filter-button bg-blue-100 transition-all duration-200 hover:scale-105 hover:shadow-lg" data-filter="all">
+            <p class="text-sm font-medium text-blue-800">Total Appointments</p>
+            <p class="text-2xl font-bold text-blue-900">0</p>
+          </div>
+          <div class="p-4 rounded-xl cursor-pointer total-filter-button bg-green-100 transition-all duration-200 hover:scale-105 hover:shadow-lg" data-filter="Completed">
+            <p class="text-sm font-medium text-green-800">Completed</p>
+            <p class="text-2xl font-bold text-green-900">0</p>
+          </div>
+          <div class="p-4 rounded-xl cursor-pointer total-filter-button bg-yellow-100 transition-all duration-200 hover:scale-105 hover:shadow-lg" data-filter="Upcoming">
+            <p class="text-sm font-medium text-yellow-800">Upcoming</p>
+            <p class="text-2xl font-bold text-yellow-900">0</p>
+          </div>
+          <div class="p-4 rounded-xl cursor-pointer total-filter-button bg-red-100 transition-all duration-200 hover:scale-105 hover:shadow-lg" data-filter="Cancelled">
+            <p class="text-sm font-medium text-red-800">Cancelled</p>
+            <p class="text-2xl font-bold text-red-900">0</p>
+          </div>
+        </div>
+
+        <div id="appointments-list" class="space-y-4"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Upcoming Prescriptions -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+          <h3 class="text-xl font-semibold text-gray-900 mb-4">Upcoming Prescriptions</h3>
+          <ul id="prescriptions-list" class="space-y-2"></ul>
+        </div>
+
+        <!-- Swipable Health Tips -->
+        <div class="bg-gradient-to-r from-indigo-500 to-blue-600 rounded-xl shadow-lg p-6 text-white flex flex-col items-center relative overflow-hidden">
+          <img src="https://cdn-icons-png.flaticon.com/512/2966/2966488.png" alt="Tip Icon" class="w-16 h-16 mb-4">
+          <h3 class="text-xl font-semibold">💡 Daily Health Tips</h3>
+          <div id="health-tip-text" class="text-center text-sm mt-3 px-4 transition-opacity duration-500">
+            Loading tips...
+          </div>
+          <div id="tip-dots" class="flex space-x-2 mt-4"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white shadow-md mt-auto">
+    <div class="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto p-4 text-sm text-gray-600">
+      <div>© 2025 YouHealth</div>
+      <div class="mt-2 md:mt-0 flex space-x-4">
+        <span>Made simple</span>
+        <a href="#" class="hover:text-blue-900">Privacy</a>
+        <a href="#" class="hover:text-blue-900">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  let loggedInUser = null; 
+  let allAppointments = [];
+  let activeDateFilter = "all", activeStatusFilter = "all";
+
+  async function ensureLoggedInUser() {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      const res = await fetch("http://localhost:3000/me", {
+        headers: { 
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        loggedInUser = data;
+        localStorage.setItem("loggedInUser", JSON.stringify(data));
+      } else {
+        loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || null;
+      }
+    } catch (err) {
+      console.error("Error fetching user info:", err);
+      loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || null;
+    }
+    updateGreeting();
+  }
+
+  function updateGreeting() {
+    const greetingEl = document.querySelector("#home-page h2");
+    if (!loggedInUser) {
+      greetingEl.textContent = `Hello, User!`;
+      return;
+    }
+    const name = loggedInUser.firstName || loggedInUser.fullName || loggedInUser.email || "User";
+    greetingEl.textContent = `Hello, ${name}!`;
+  }
+
+  async function fetchMedications() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      document.getElementById("prescriptions-list").innerHTML = `<p class="text-gray-500 text-sm">Not authenticated. Please log in to see prescriptions.</p>`;
+      return;
+    }
+    try {
+      const res = await fetch(`http://localhost:3000/medications?patientId=${loggedInUser.id}`, {
+        headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" }
+      });
+      if (!res.ok) throw new Error("Failed to fetch medications");
+      const meds = await res.json();
+      if (!Array.isArray(meds) || meds.length === 0) {
+        document.getElementById("prescriptions-list").innerHTML = `<p class="text-gray-500 text-sm">No prescriptions found.</p>`;
+        return;
+      }
+      renderPrescriptions(meds);
+    } catch(err) {
+      console.error("Error fetching medications:", err);
+      document.getElementById("prescriptions-list").innerHTML = `<p class="text-red-500 text-sm">Could not load prescriptions.</p>`;
+    }
+  }
+
+  function renderPrescriptions(meds) {
+    const list = document.getElementById("prescriptions-list");
+    list.innerHTML = "";
+    meds.forEach(med => {
+      const li = document.createElement("li");
+      li.className = "p-3 bg-gray-50 rounded-lg flex items-center justify-between hover:bg-blue-50 transition";
+      li.innerHTML = `<span>${med.name}</span><span class="text-sm text-gray-500">${med.dosage || "No dosage info"}</span>`;
+      list.appendChild(li);
+    });
+  }
+
+  function updateAppointmentCounts(appointments) {
+    const total = appointments.length;
+    const completed = appointments.filter(a => (a.status || "").toUpperCase() === "COMPLETED").length;
+    const upcoming = appointments.filter(a => ["CONFIRMED","PENDING"].includes((a.status || "").toUpperCase())).length;
+    const cancelled = appointments.filter(a => (a.status || "").toUpperCase() === "CANCELLED").length;
+    document.querySelector("#total-appointments-card p:nth-child(2)").textContent = total;
+    document.querySelector(".total-filter-button[data-filter='Completed'] p:nth-child(2)").textContent = completed;
+    document.querySelector(".total-filter-button[data-filter='Upcoming'] p:nth-child(2)").textContent = upcoming;
+    document.querySelector(".total-filter-button[data-filter='Cancelled'] p:nth-child(2)").textContent = cancelled;
+  }
+
+  // Health tips
+  const tips = ["🚶 Walk after meals for better digestion.","💧 Drink 8 glasses of water daily.","🛌 Sleep 7-9 hours per night.","🥦 Eat more fruits & vegetables.","🧘 Relax for 5 minutes daily"];
+  let currentTipIndex = 0;
+  const tipText = document.getElementById("health-tip-text");
+  const dotsContainer = document.getElementById("tip-dots");
+  function renderDots() { 
+    dotsContainer.innerHTML = "";
+    tips.forEach((_,i)=>{
+      const dot = document.createElement("div");
+      dot.className = "w-2.5 h-2.5 rounded-full cursor-pointer " + (i===currentTipIndex?"bg-white":"bg-white/50");
+      dot.addEventListener("click",()=>{ currentTipIndex=i; showTip(); });
+      dotsContainer.appendChild(dot);
+    });
+  }
+  function showTip() {
+    tipText.style.opacity = 0;
+    setTimeout(()=>{
+      tipText.textContent = tips[currentTipIndex];
+      tipText.style.opacity=1;
+      renderDots();
+    },300);
+  }
+  setInterval(()=>{ currentTipIndex=(currentTipIndex+1)%tips.length; showTip(); },5000);
+
+  // Appointment filters
+  function applyFilters() {
+    let filtered = [...allAppointments];
+    const now = new Date();
+    if(activeDateFilter==="day") filtered=filtered.filter(a=>{ const d=new Date(a.dateTime); return !isNaN(d.getTime())&&d.toDateString()===now.toDateString(); });
+    else if(activeDateFilter==="week"){ const start=new Date(now); start.setDate(now.getDate()-now.getDay()); const end=new Date(start); end.setDate(start.getDate()+7); filtered=filtered.filter(a=>{ const d=new Date(a.dateTime); return !isNaN(d.getTime())&&d>=start&&d<end; }); }
+    else if(activeDateFilter==="month") filtered=filtered.filter(a=>{ const d=new Date(a.dateTime); return !isNaN(d.getTime())&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear(); });
+    else if(activeDateFilter==="year") filtered=filtered.filter(a=>{ const d=new Date(a.dateTime); return !isNaN(d.getTime())&&d.getFullYear()===now.getFullYear(); });
+    if(activeStatusFilter!=="all") filtered = filtered.filter(a=>activeStatusFilter==="Upcoming"?["CONFIRMED","PENDING"].includes((a.status||"").toUpperCase()):(a.status||"").toUpperCase()===activeStatusFilter.toUpperCase());
+    renderAppointments(filtered);
+  }
+
+  function renderAppointments(appointments) {
+    const list = document.getElementById("appointments-list");
+    list.innerHTML="";
+    if(!appointments||appointments.length===0){ list.innerHTML=`<p class="text-gray-500 text-sm">No appointments found.</p>`; return; }
+    const statusColors = { CONFIRMED:"bg-green-100 text-green-800", PENDING:"bg-yellow-100 text-yellow-800", CANCELLED:"bg-red-100 text-red-800", COMPLETED:"bg-blue-100 text-blue-800" };
+    appointments.forEach(app=>{
+      const d=new Date(app.dateTime);
+      const formattedDate = !isNaN(d.getTime())?d.toLocaleDateString():(app.dateTime||"N/A");
+      const formattedTime = !isNaN(d.getTime())?d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}):(app.time||"N/A");
+      const st=(app.status||"").toUpperCase();
+      const typeIcon=(app.type||"").toUpperCase()==="TELEHEALTH"?"💻":"🏥";
+      const card=document.createElement("div");
+      card.className="bg-white rounded-xl shadow-md p-5 mb-4 border hover:shadow-lg transition-all duration-200";
+      card.innerHTML=`<div class="flex justify-between items-start"><div><h3 class="font-semibold text-lg text-gray-900 flex items-center gap-2">${typeIcon} Dr. ${app.doctor?.firstName||""} ${app.doctor?.lastName||""}</h3><p class="text-sm text-gray-500">👤 Patient: ${app.patient?.firstName||""} ${app.patient?.lastName||""}</p></div><span class="px-3 py-1 rounded-full text-xs font-semibold ${statusColors[st]||"bg-gray-100 text-gray-800"}">${app.status||"N/A"}</span></div><div class="mt-3 flex items-center gap-6 text-gray-700 text-sm"><span>📅 ${formattedDate}</span><span>⏰ ${formattedTime}</span></div>`;
+      list.appendChild(card);
+    });
+  }
+
+  async function fetchAppointments() {
+    const token = localStorage.getItem("token");
+    if(!token) return;
+    try {
+      const res = await fetch(`http://localhost:3000/appointments?patientId=${loggedInUser.id}`, {
+        headers:{ "Authorization": `Bearer ${token}`, "Content-Type": "application/json" }
+      });
+      if(!res.ok) throw new Error("Failed to fetch appointments");
+      allAppointments = await res.json();
+      updateAppointmentCounts(allAppointments);
+      applyFilters();
+    } catch(err){ console.error("Error fetching appointments:", err); }
+  }
+
+  // ✅ One unified DOMContentLoaded handler
+  document.addEventListener("DOMContentLoaded", async () => {
+    // Handle Google login redirect
+    const params = new URLSearchParams(window.location.search);
+    const tokenFromUrl = params.get("token");
+    const userFromUrl = params.get("user");
+
+    if (tokenFromUrl && userFromUrl) {
+      localStorage.setItem("token", tokenFromUrl);
+      try {
+        localStorage.setItem("loggedInUser", JSON.stringify(JSON.parse(userFromUrl)));
+      } catch {
+        console.warn("Could not parse user JSON");
+      }
+      // remove query params to avoid redirect loop
+      window.history.replaceState({}, document.title, "Healthdashboard.html");
+    }
+
+    // Load user info
+    await ensureLoggedInUser();
+    fetchAppointments();
+    fetchMedications();
+    showTip();
+
+    // Setup filters
+    document.querySelectorAll(".filter-button").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        document.querySelectorAll(".filter-button").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        activeDateFilter=btn.dataset.filter;
+        applyFilters();
+      });
+    });
+
+    document.querySelectorAll(".total-filter-button").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        document.querySelectorAll(".total-filter-button").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        activeStatusFilter=btn.dataset.filter;
+        applyFilters();
+      });
+    });
+
+    // Mobile menu toggle
+    const mobileButton = document.getElementById("mobile-menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+    if (mobileButton && mobileMenu) {
+      mobileButton.addEventListener("click",()=>{ mobileMenu.classList.toggle("hidden"); });
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - YouHealth</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+
+    /* Fade-in animation */
+    .fade-in-up { opacity: 0; transform: translateY(20px); transition: all 0.8s ease-in-out; }
+    .fade-in-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* Header & Navigation */
+    header {
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(43, 96, 220, 0.151);
+      padding: 5px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .header-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+    .branding { display: flex; align-items: center; }
+    .header-logo { height: 45px; margin-right: 10px; }
+    .branding h1 { font-size: 1.5rem; color: #1e3a8a; margin: 0; }
+
+    /* Desktop Nav */
+    .main-nav ul {
+      display: flex;
+      gap: 30px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .main-nav a { text-decoration: none; color: #555; font-weight: bold; transition: color 0.3s; }
+    .main-nav a:hover { color: #1e3a8a; }
+    .main-nav a.active { color: #1e3a8a; border-bottom: 2px solid #1e3a8a; padding-bottom: 2px; }
+
+    .auth-links {
+      display: flex;
+      gap: 15px;
+    }
+    .auth-links button {
+      background-color: #1e3a8a;
+      color: white;
+      padding: 6px 16px;
+      border: none;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .auth-links button:hover { background-color: #15306d; }
+    .auth-links button:last-child {
+      background-color: transparent;
+      color: #1e3a8a;
+      border: 1px solid #1e3a8a;
+    }
+    .auth-links button:last-child:hover { background-color: #1e3a8a; color: white; }
+
+    /* Hamburger Menu */
+    .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
+    .hamburger div { width: 25px; height: 3px; background-color: #1e3a8a; }
+
+    /* Side menu */
+    .side-menu {
+      position: fixed;
+      top: 0;
+      right: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: white;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+      padding: 50px 20px;
+      transition: right 0.3s ease;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .side-menu a { text-decoration: none; color: #1e3a8a; font-weight: bold; font-size: 18px; }
+    .side-menu button { width: 100%; margin-top: 10px; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .main-nav, .auth-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* Hero Section */
+    .hero { background-color: #1e3a8a; color: white; padding: 80px 20px; text-align: center; }
+    .hero h2 { font-size: 2.5rem; margin-bottom: 10px; }
+    .hero p { font-size: 1.2rem; }
+
+    /* Contact Section */
+    main { flex-grow: 1; padding: 60px 20px; max-width: 1200px; margin: auto; box-sizing: border-box; }
+    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; }
+    .bg-white, .card { box-sizing: border-box; }
+    .card h3 { color: #1e3a8a; font-size: 1.8rem; margin-bottom: 15px; }
+
+    /* Footer */
+    footer { background: #1f2937; color: #e5e7eb; text-align: center; padding: 16px; margin-top: 40px; }
+
+    /* Inputs & Textarea */
+    input, textarea { max-width: 100%; box-sizing: border-box; }
+
+    /* Make iframe responsive */
+    iframe { max-width: 100%; }
+  </style>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+
+  <!-- Header -->
+  <header>
+    <div class="header-wrapper">
+      <div class="branding">
+        <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="header-logo">
+        <h1>YouHealth</h1>
+      </div>
+
+      <!-- Desktop nav -->
+      <nav class="main-nav">
+        <ul>
+          <li><a href="YouHealthHomepage.html">Home</a></li>
+          <li><a href="Aboutus.html">About Us</a></li>
+          <li><a href="Services.html">Services</a></li>
+          <li><a href="Contactus.html" class="active">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="auth-links">
+        <a href="Whoareyoupage.html"><button>Sign Up</button></a>
+        <a href="Loginpage.html"><button>Log In</button></a>
+      </div>
+
+      <!-- Hamburger -->
+      <div class="hamburger" id="hamburger">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Side Menu -->
+  <div class="side-menu" id="sideMenu">
+    <a href="YouHealthHomepage.html">Home</a>
+    <a href="Aboutus.html">About Us</a>
+    <a href="Services.html">Services</a>
+    <a href="Contactus.html" class="active">Contact</a>
+    <a href="Whoareyoupage.html"><button class="bg-blue-900 hover:bg-blue-800 text-white font-medium py-3 rounded-lg">Sign Up</button></a>
+    <a href="Loginpage.html"><button class="bg-white border border-blue-900 text-blue-900 hover:bg-blue-900 hover:text-white font-medium py-3 rounded-lg">Log In</button></a>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="bg-blue-900 text-white py-16">
+    <div class="max-w-4xl mx-auto text-center fade-in-up">
+      <h2 class="text-4xl font-bold mb-4">Get in Touch</h2>
+      <p class="text-lg">We’d love to hear from you! Reach out with any questions, feedback, or support inquiries.</p>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <main class="flex-grow py-16 px-6">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
+      <div class="bg-white p-8 rounded-xl shadow-md fade-in-up">
+        <h3 class="text-2xl font-semibold text-blue-900 mb-6">📩 Send Us a Message</h3>
+        <form action="#" method="POST" class="space-y-5">
+          <div>
+            <label class="block text-gray-700 font-medium">Full Name</label>
+            <input type="text" placeholder="Enter your name" class="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-blue-900 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-gray-700 font-medium">Email Address</label>
+            <input type="email" placeholder="Enter your email" class="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-blue-900 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-gray-700 font-medium">Message</label>
+            <textarea placeholder="Write your message here..." rows="5" class="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-blue-900 focus:outline-none"></textarea>
+          </div>
+          <button type="submit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-medium py-3 rounded-lg">Send Message</button>
+        </form>
+      </div>
+
+      <div class="bg-white p-8 rounded-xl shadow-md fade-in-up">
+        <h3 class="text-2xl font-semibold text-blue-900 mb-6">📍 Contact Information</h3>
+        <ul class="space-y-5 text-gray-600">
+          <li><strong class="block text-gray-800">Office Address</strong>123 Health Street, Abuja, Nigeria</li>
+          <li><strong class="block text-gray-800">Phone</strong>+234 800 123 4567</li>
+          <li><strong class="block text-gray-800">Email</strong>support@youhealth.com</li>
+        </ul>
+        <div class="mt-8">
+          <iframe class="w-full h-64 rounded-lg" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3915.807214!2d7.4951!3d9.0579!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x104e0a58f!2sAbuja%20Nigeria!5e0!3m2!1sen!2sng!4v1610000000000" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-gray-200 text-center py-4 mt-6">
+    <p>&copy; 2025 YouHealth. All rights reserved.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    const faders = document.querySelectorAll(".fade-in-up");
+    const appearOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+    const appearOnScroll = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
+      });
+    }, appearOptions);
+    faders.forEach(fader => appearOnScroll.observe(fader));
+
+    // Hamburger toggle
+    const hamburger = document.getElementById("hamburger");
+    const sideMenu = document.getElementById("sideMenu");
+    let menuOpen = false;
+
+    hamburger.addEventListener("click", () => {
+      if(!menuOpen) {
+        sideMenu.style.right = "0";
+        menuOpen = true;
+      } else {
+        sideMenu.style.right = "-250px";
+        menuOpen = false;
+      }
+    });
+
+    // Close menu when clicking a link
+    document.querySelectorAll(".side-menu a").forEach(link => {
+      link.addEventListener("click", () => {
+        sideMenu.style.right = "-250px";
+        menuOpen = false;
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -9,8 +9,8 @@
     <style>
         /* General Styles */
         :root {
-            --brand: #2b60dc;
-            --secondary-brand: #1a4da3;
+            --brand: #1e3a8a; /* darker blue */
+            --secondary-brand: #162b66; /* even darker shade */
             --muted: #6b7280;
             --bg: #f7f8fa;
             --panel-bg: rgba(255, 255, 255, 0.95);
@@ -87,6 +87,13 @@
         .main-nav a:hover {
             color: var(--brand);
         }
+
+        .main-nav a.active {
+    color: var(--brand);
+    border-bottom: 2px solid var(--brand);
+    padding-bottom: 2px;
+}
+
         
         /* Auth Links */
         .auth-links {
@@ -123,15 +130,15 @@
             background-color: var(--secondary-brand);
         }
         
-        /* Hamburger menu button */
+        /* Hamburger menu button (updated for uniformity) */
         .hamburger-menu {
             display: none;
             cursor: pointer;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: var(--brand);
             background: none;
             border: none;
-            padding: 0;
+            padding: 6px;
         }
         
         /* Side Navigation */
@@ -431,6 +438,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <div class="header-wrapper">
@@ -439,17 +447,20 @@
                 <h1>YouHealth</h1>
             </div>
             <nav class="main-nav">
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About Us</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
+    <ul>
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="Aboutus.html">About Us</a></li>
+        <li><a href="Services.html">Services</a></li>
+        <li><a href="Contactus.html">Contact</a></li>
+    </ul>
+</nav>
+
+
             <div class="auth-links">
                 <a href="Whoareyoupage.html"><button class="btn bg-blue-600 hover:bg-blue-700">Sign Up</button></a>
                 <a href="Loginpage.html"><button>Log In</button></a>
             </div>
+            <!-- Updated hamburger for uniformity -->
             <button class="hamburger-menu" aria-controls="side-nav" aria-expanded="false" aria-label="Open navigation menu">
                 <i class="fas fa-bars"></i>
             </button>
@@ -458,7 +469,7 @@
             <button class="close-menu" aria-label="Close navigation menu">&times;</button>
             <ul>
                 <li><a href="#home">Home</a></li>
-                <li><a href="#about">About Us</a></li>
+                <li><a href="Aboutus.html">About Us</a></li>
                 <li><a href="#services">Services</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>

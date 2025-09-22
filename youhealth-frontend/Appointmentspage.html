@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Appointments</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General body styling for the full-screen background and font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Style for the status badge */
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+        /* Modal overlay for the booking form */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            max-height: 90vh;
+            transition: all 0.3s ease;
+        }
+
+        /* simple toast for fallback notifications */
+        #inpage-toast {
+          position: fixed;
+          right: 16px;
+          bottom: 24px;
+          z-index: 2000;
+          display: none;
+          min-width: 220px;
+        }
+    </style>
+</head>
+<body class="bg-blue-900 text-gray-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="flex items-center justify-between max-w-7xl mx-auto px-4 py-2 md:px-6">
+            <div class="flex items-center space-x-2">
+                <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="h-10 w-10 rounded-xl">
+                <a href="YouHealthHomepage.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer drop-shadow-sm">YouHealth</a>
+            </div>
+            <nav class="hidden md:flex flex-1 justify-center space-x-8">
+                <a href="Healthdashboard.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Dashboard</a>
+                <a href="SearchPage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Search</a>
+                <a href="£Appointmentspage.page" class="nav-link font-bold text-blue-900 hover:text-blue-900 transition duration-300 active">Appointments</a>
+                <a href="Medicationspage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Medications</a>
+                <a href="Settings.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Settings</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="YouHealthHomepage.html" 
+   class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105 text-sm hidden md:block">
+   Log Out
+</a>
+
+
+                <button id="mobile-menu-button" class="md:hidden text-gray-700 hover:text-blue-900 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg pb-4">
+            <nav class="flex flex-col items-center space-y-4 pt-2">
+                <a href="Healthdashboard.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Dashboard</a>
+                <a href="SearchPage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Search</a>
+                <a href="#Appointmentspage" class="nav-link font-bold text-blue-900 hover:text-blue-900 transition duration-300 active">Appointments</a>
+                <a href="Medicationspage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Medications</a>
+                <a href="Settings.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Settings</a>
+                <a href="YouHealthHomepage.html" 
+   class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105 text-sm hidden md:block">
+   Log Out
+</a>
+
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 text-center">Appointments Overview</h2>
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+                <div class="relative w-full sm:w-1/2">
+                    <input type="text" id="appointment-search" placeholder="Search for an appointment..." class="w-full px-5 py-3 pr-12 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 text-gray-700 placeholder-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <button id="book-new-appointment-btn" class="w-full sm:w-auto px-6 py-3 rounded-full text-blue-900 font-semibold bg-white hover:bg-blue-700 transition duration-300 transform hover:scale-105 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                    Book a New Appointment
+                </button>
+            </div>
+            <div id="appointments-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            </div>
+        </div>
+    </main>
+
+    <div id="booking-modal" class="modal-overlay hidden opacity-0 transition-opacity duration-300">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl p-6 md:p-8 w-11/12 max-w-lg mx-4 overflow-y-auto transform scale-95 opacity-0 transition-all duration-300">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-900">Book a New Appointment</h3>
+                <button id="close-modal-btn" class="text-gray-500 hover:text-gray-800 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <form id="booking-form" class="space-y-4">
+                <div>
+                    <label for="doctor-select" class="block text-sm font-medium text-gray-700 mb-1">Select a Doctor</label>
+                    <select id="doctor-select" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </select>
+                </div>
+                <div>
+                    <label for="appointment-date" class="block text-sm font-medium text-gray-700 mb-1">Appointment Date</label>
+                    <input type="date" id="appointment-date" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label for="appointment-time" class="block text-sm font-medium text-gray-700 mb-1">Appointment Time</label>
+                    <input type="time" id="appointment-time" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label for="appointment-type" class="block text-sm font-medium text-gray-700 mb-1">Appointment Type</label>
+                    <select id="appointment-type" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="In-person">In-person</option>
+                        <option value="Telehealth">Online</option>
+                    </select>
+                </div>
+                
+                <div class="mt-6">
+                    <button type="submit" class="w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
+                        Confirm Appointment
+                    </button>
+                </div>
+            </form>
+            <div id="confirmation-box" class="hidden mt-6 p-4 rounded-lg bg-green-100 text-green-700 text-sm font-semibold text-center">
+                Appointment booked successfully!
+            </div>
+        </div>
+    </div>
+
+    <!-- Appointment details modal (new) -->
+    <div id="appointment-details-modal" class="modal-overlay hidden opacity-0 transition-opacity duration-300">
+      <div class="modal-content bg-white rounded-2xl shadow-2xl p-6 md:p-8 w-11/12 max-w-md mx-4 overflow-y-auto transform scale-95 opacity-0 transition-all duration-300">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-2xl font-bold text-gray-900" id="detail-doctor-name">Appointment</h3>
+          <button id="close-appointment-details" class="text-gray-500 hover:text-gray-800">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="space-y-3 text-sm text-gray-700">
+          <p><strong>Doctor:</strong> <span id="detail-doctor"></span></p>
+          <p><strong>Date:</strong> <span id="detail-date"></span></p>
+          <p><strong>Time:</strong> <span id="detail-time"></span></p>
+          <p><strong>Type:</strong> <span id="detail-type"></span></p>
+          <p><strong>Status:</strong> <span id="detail-status" class="font-semibold"></span></p>
+          <p><strong>Notes:</strong></p>
+          <p id="detail-notes" class="text-gray-600"></p>
+        </div>
+
+        <div class="mt-6 flex gap-3">
+          <button id="detail-cancel-btn" class="flex-1 py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600">Cancel Appointment</button>
+          <button id="detail-close-btn" class="flex-1 py-2 px-4 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- in-page toast for fallback notifications -->
+    <div id="inpage-toast" class="hidden p-3 rounded-lg shadow-lg bg-white text-gray-800"></div>
+
+    <footer class="bg-white shadow-md mt-auto">
+        <div class="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto p-4 text-sm text-gray-600">
+            <div>© 2025 YouHealth</div>
+            <div class="mt-2 md:mt-0 flex space-x-4">
+                <span>Made simple</span>
+                <a href="#" class="hover:text-blue-600 transition duration-300">Privacy</a>
+                <a href="#" class="hover:text-blue-600 transition duration-300">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+const API_BASE = "http://localhost:3000";
+const token = localStorage.getItem("token");
+const notificationLeadMinutes = 30;
+const scheduledNotifications = new Map();
+
+// Request notification permission early but politely
+async function ensureNotificationPermission() {
+  if (!("Notification" in window)) return false;
+  if (Notification.permission === "granted") return true;
+  if (Notification.permission === "denied") return false;
+  try {
+    const permission = await Notification.requestPermission();
+    return permission === "granted";
+  } catch (err) {
+    console.error("Notification permission error:", err);
+    return false;
+  }
+}
+
+function getAppointmentDate(appointment) {
+  if (appointment.dateTime) {
+    const d = new Date(appointment.dateTime);
+    if (!isNaN(d.getTime())) return d;
+  }
+  if (appointment.date && appointment.time) {
+    const iso = `${appointment.date}T${appointment.time}`;
+    const d = new Date(iso);
+    if (!isNaN(d.getTime())) return d;
+  }
+  if (appointment.date) {
+    const d = new Date(appointment.date);
+    if (!isNaN(d.getTime())) return d;
+  }
+  return null;
+}
+
+function showInpageToast(text) {
+  const toast = document.getElementById("inpage-toast");
+  toast.textContent = text;
+  toast.classList.remove("hidden");
+  toast.style.display = "block";
+  setTimeout(() => { toast.style.opacity = "1"; }, 10);
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    setTimeout(() => {
+      toast.classList.add("hidden");
+      toast.style.display = "none";
+    }, 300);
+  }, 6000);
+}
+
+function showNotification(appointment) {
+  const doctorName = appointment.doctor ? `${appointment.doctor.firstName} ${appointment.doctor.lastName}` : (appointment.doctorName || "your doctor");
+  const title = "Upcoming appointment";
+  const body = `You have an appointment with ${doctorName} at ${formatTime(getAppointmentDate(appointment))}.`;
+
+  if ("Notification" in window && Notification.permission === "granted") {
+    try {
+      const n = new Notification(title, { body, tag: `appointment-${appointment.id}`, renotify: true });
+      n.onclick = () => { window.focus(); openAppointmentDetails(appointment); };
+    } catch (err) {
+      console.error("Notification error:", err);
+      showInpageToast(body);
+    }
+  } else {
+    showInpageToast(body);
+  }
+}
+
+function scheduleNotificationForAppointment(appointment) {
+  if (!appointment || !appointment.id) return;
+  if (scheduledNotifications.has(appointment.id)) {
+    clearTimeout(scheduledNotifications.get(appointment.id));
+    scheduledNotifications.delete(appointment.id);
+  }
+  if (!appointment || appointment.status && (appointment.status.toUpperCase() === "CANCELLED" || appointment.status.toUpperCase() === "COMPLETED")) {
+    return;
+  }
+  const apptDate = getAppointmentDate(appointment);
+  if (!apptDate) return;
+  const notifyBeforeMs = notificationLeadMinutes * 60 * 1000;
+  const notifyAt = apptDate.getTime() - notifyBeforeMs;
+  const now = Date.now();
+  const delay = notifyAt - now;
+  const MAX_TIMEOUT = 2147483647;
+  if (delay <= 0) {
+    if (apptDate.getTime() > now) setTimeout(() => showNotification(appointment), 1000);
+    return;
+  }
+  if (delay > MAX_TIMEOUT) { console.info("Too far ahead to schedule:", appointment.id); return; }
+  const tid = setTimeout(() => { showNotification(appointment); scheduledNotifications.delete(appointment.id); }, delay);
+  scheduledNotifications.set(appointment.id, tid);
+}
+
+function scheduleNotifications(appointments) { appointments.forEach(scheduleNotificationForAppointment); }
+function formatDate(d) { if (!d) return "N/A"; return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }); }
+function formatTime(d) { if (!d) return "N/A"; return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
+
+/* fetch appointments and render */
+async function fetchAppointments() {
+  try {
+    const res = await fetch(`${API_BASE}/appointments`, { headers: { "Authorization": `Bearer ${token}` } });
+    if (!res.ok) throw new Error("Failed to fetch appointments");
+    const appointments = await res.json();
+    renderAppointments(appointments);
+    ensureNotificationPermission().then(() => scheduleNotifications(appointments));
+  } catch (err) {
+    console.error("Error fetching appointments:", err);
+  }
+}
+
+function renderAppointments(appointments) {
+  const container = document.getElementById('appointments-container');
+  container.innerHTML = '';
+  if (!appointments || !appointments.length) {
+    container.innerHTML = '<p class="text-center text-gray-500 py-8 col-span-full">No appointments found.</p>';
+    return;
+  }
+
+  appointments.forEach(appointment => {
+    let statusClass = '';
+    const st = (appointment.status || "").toUpperCase();
+    if (st === 'CONFIRMED') statusClass = 'bg-green-100 text-green-700';
+    else if (st === 'COMPLETED') statusClass = 'bg-blue-100 text-blue-700';
+    else if (st === 'CANCELLED' || st === 'CANCELED') statusClass = 'bg-red-100 text-red-700';
+    else statusClass = 'bg-gray-100 text-gray-700';
+
+    const apptDate = getAppointmentDate(appointment);
+    const formattedDate = apptDate ? formatDate(apptDate) : (appointment.date || "N/A");
+    const formattedTime = apptDate ? formatTime(apptDate) : (appointment.time || "N/A");
+    const doctorName = appointment.doctor ? `${appointment.doctor.firstName} ${appointment.doctor.lastName}` : (appointment.doctorName || 'Doctor');
+
+    const card = document.createElement('div');
+    card.className = "bg-white rounded-xl shadow-md p-6 flex flex-col hover:shadow-xl hover:scale-[1.02] transition";
+    card.dataset.apptId = appointment.id;
+
+    card.innerHTML = `
+      <div class="flex items-center justify-between mb-4">
+        <h4 class="text-lg font-bold text-gray-900">${doctorName}</h4>
+        <span class="status-badge ${statusClass}">${appointment.status || 'N/A'}</span>
+      </div>
+      <p class="text-sm text-gray-600 mb-2"><strong>Date:</strong> ${formattedDate}</p>
+      <p class="text-sm text-gray-600 mb-2"><strong>Time:</strong> ${formattedTime}</p>
+      <p class="text-sm text-gray-600 mb-4"><strong>Type:</strong> ${appointment.type || (appointment.appointmentType || 'N/A')}</p>
+    `;
+
+    const btnRow = document.createElement('div');
+    btnRow.className = "mt-auto flex gap-3";
+
+    const detailsBtn = document.createElement('button');
+    detailsBtn.className = "flex-1 py-2 px-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700";
+    detailsBtn.textContent = "Details";
+    detailsBtn.addEventListener('click', () => openAppointmentDetails(appointment));
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.className = "flex-1 py-2 px-3 bg-red-500 text-white rounded-lg hover:bg-red-600 cancel-btn";
+    cancelBtn.textContent = "Cancel";
+    const canCancel = !appointment.status || ['PENDING','CONFIRMED','Pending','Confirmed'].includes(appointment.status);
+    if (!canCancel) {
+      cancelBtn.disabled = true;
+      cancelBtn.classList.add("opacity-60", "cursor-not-allowed");
+    } else {
+      // pass cancelBtn to cancelAppointment so it can disable/restore it and update UI
+      cancelBtn.addEventListener('click', async () => {
+        const ok = confirm("Are you sure you want to cancel this appointment?");
+        if (!ok) return;
+        await cancelAppointment(appointment.id, cancelBtn);
+      });
+    }
+
+    btnRow.appendChild(detailsBtn);
+    btnRow.appendChild(cancelBtn);
+    card.appendChild(btnRow);
+    container.appendChild(card);
+  });
+}
+
+/* Appointment details modal functions */
+function populateAppointmentModal(appointment) {
+  const apptDate = getAppointmentDate(appointment);
+
+  document.getElementById("detail-doctor-name").textContent = `Appointment with ${appointment.doctor ? (appointment.doctor.firstName + " " + appointment.doctor.lastName) : (appointment.doctorName || "Doctor")}`;
+  document.getElementById("detail-doctor").textContent = appointment.doctor ? (appointment.doctor.firstName + " " + appointment.doctor.lastName) : (appointment.doctorName || "Doctor");
+  document.getElementById("detail-date").textContent = apptDate ? formatDate(apptDate) : (appointment.date || "N/A");
+  document.getElementById("detail-time").textContent = apptDate ? formatTime(apptDate) : (appointment.time || "N/A");
+  document.getElementById("detail-type").textContent = appointment.type || (appointment.appointmentType || 'N/A');
+  document.getElementById("detail-status").textContent = appointment.status || "N/A";
+  document.getElementById("detail-notes").textContent = appointment.notes || appointment.description || "No additional notes.";
+
+  const modalCancelBtn = document.getElementById("detail-cancel-btn");
+  modalCancelBtn.onclick = async () => {
+    const ok = confirm("Are you sure you want to cancel this appointment?");
+    if (!ok) return;
+    await cancelAppointment(appointment.id, modalCancelBtn);
+    closeAppointmentDetails();
+  };
+
+  document.getElementById("detail-close-btn").onclick = closeAppointmentDetails;
+}
+
+function openAppointmentDetails(appointment) {
+  populateAppointmentModal(appointment);
+  const modal = document.getElementById("appointment-details-modal");
+  const content = modal.querySelector(".modal-content");
+  modal.classList.remove("hidden");
+  setTimeout(() => {
+    modal.classList.remove("opacity-0");
+    content.classList.remove("opacity-0", "scale-95");
+  }, 10);
+}
+
+function closeAppointmentDetails() {
+  const modal = document.getElementById("appointment-details-modal");
+  const content = modal.querySelector(".modal-content");
+  modal.classList.add("opacity-0");
+  content.classList.add("opacity-0", "scale-95");
+  setTimeout(() => modal.classList.add("hidden"), 300);
+}
+
+document.getElementById("close-appointment-details").addEventListener("click", closeAppointmentDetails);
+document.getElementById("appointment-details-modal").addEventListener("click", (e) => {
+  if (e.target === e.currentTarget) closeAppointmentDetails();
+});
+
+/* Cancel appointment: uses string UUID (do NOT parseInt). Accepts optional button element to disable while request runs */
+async function cancelAppointment(appointmentId, button = null) {
+  if (!appointmentId) {
+    alert("❌ Invalid appointment ID");
+    return;
+  }
+
+  // temporarily disable button if provided
+  if (button) {
+    button.disabled = true;
+    button.dataset.origText = button.textContent;
+    button.textContent = "Cancelling...";
+    button.classList.add("opacity-60", "cursor-not-allowed");
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/appointments/${encodeURIComponent(appointmentId)}/cancel`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    const data = await res.json().catch(() => null);
+
+    if (!res.ok) {
+      console.error("Cancel failed:", data);
+      alert("❌ Failed to cancel appointment: " + (data?.error || data?.message || res.statusText));
+      return;
+    }
+
+    // clear scheduled notification for this appointment
+    if (scheduledNotifications.has(appointmentId)) {
+      clearTimeout(scheduledNotifications.get(appointmentId));
+      scheduledNotifications.delete(appointmentId);
+    }
+
+    // update the card's badge immediately if we can find it (avoid waiting on full refresh)
+    let newStatus = (data?.updated?.status) || (data?.appointment?.status) || "CANCELLED";
+    const card = button ? button.closest('[data-appt-id]') : (document.querySelector(`[data-appt-id="${CSS && CSS.escape ? CSS.escape(appointmentId) : appointmentId}"]`));
+    if (card) {
+      const badge = card.querySelector('.status-badge');
+      if (badge) {
+        badge.textContent = newStatus;
+        badge.className = 'status-badge bg-red-100 text-red-700';
+      }
+    }
+
+    showInpageToast(data?.message || "Appointment canceled");
+
+    // refresh fully to keep everything consistent
+    await fetchAppointments();
+  } catch (err) {
+    console.error("Cancel error:", err);
+    alert("⚠️ Error canceling appointment. Please try again.");
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.textContent = button.dataset.origText || "Cancel";
+      button.classList.remove("opacity-60", "cursor-not-allowed");
+      delete button.dataset.origText;
+    }
+  }
+}
+
+/* Booking & other unchanged code follows (unchanged except small integration above) */
+document.getElementById("booking-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const doctorSelect = document.getElementById('doctor-select');
+  const appointmentDate = document.getElementById('appointment-date').value;
+  const appointmentTime = document.getElementById('appointment-time').value;
+  const appointmentType = document.getElementById('appointment-type').value;
+
+  const newAppointment = {
+    doctorId: doctorSelect.value,
+    date: appointmentDate,
+    time: appointmentTime,
+    type: appointmentType,
+    status: "Confirmed"
+  };
+
+  try {
+    const res = await fetch(`${API_BASE}/appointments`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      body: JSON.stringify(newAppointment),
+    });
+
+    if (res.ok) {
+      document.getElementById("confirmation-box").classList.remove("hidden");
+      await fetchAppointments();
+    } else {
+      const err = await res.text();
+      alert("Error booking appointment: " + err);
+    }
+  } catch (err) {
+    console.error("Booking error:", err);
+  }
+});
+
+document.getElementById("book-new-appointment-btn").addEventListener("click", () => {
+  const modal = document.getElementById("booking-modal");
+  modal.classList.remove("hidden");
+  setTimeout(() => {
+    modal.classList.remove("opacity-0");
+    modal.querySelector(".modal-content").classList.remove("opacity-0", "scale-95");
+  }, 10);
+  fetchPractitionersForSelect();
+});
+document.getElementById("close-modal-btn").addEventListener("click", () => {
+  const modal = document.getElementById("booking-modal");
+  modal.classList.add("opacity-0");
+  modal.querySelector(".modal-content").classList.add("opacity-0", "scale-95");
+  setTimeout(() => modal.classList.add("hidden"), 300);
+});
+document.getElementById("booking-modal").addEventListener("click", (e) => {
+  if (e.target.id === "booking-modal") {
+    const modal = document.getElementById("booking-modal");
+    modal.classList.add("opacity-0");
+    modal.querySelector(".modal-content").classList.add("opacity-0", "scale-95");
+    setTimeout(() => modal.classList.add("hidden"), 300);
+  }
+});
+
+async function fetchPractitionersForSelect() {
+  try {
+    const res = await fetch(`${API_BASE}/practitioners`, { headers: { "Authorization": `Bearer ${token}` } });
+    if (!res.ok) throw new Error("Failed to fetch practitioners");
+    const practitioners = await res.json();
+    const select = document.getElementById("doctor-select");
+    select.innerHTML = "";
+    if (!practitioners.length) {
+      select.innerHTML = `<option disabled>No practitioners available</option>`;
+      return;
+    }
+    practitioners.forEach(p => {
+      const option = document.createElement("option");
+      option.value = String(p.id);
+      option.textContent = `${p.firstName} ${p.lastName} (${p.specialty || 'General'})`;
+      select.appendChild(option);
+    });
+  } catch (err) {
+    console.error("Error fetching practitioners:", err);
+  }
+}
+
+document.getElementById("appointment-search").addEventListener("input", async (e) => {
+  const term = (e.target.value || "").toLowerCase();
+  try {
+    const res = await fetch(`${API_BASE}/appointments`, { headers: { "Authorization": `Bearer ${token}` } });
+    const all = await res.json();
+    const filtered = all.filter(a => {
+      const doctorName = a.doctor ? `${a.doctor.firstName} ${a.doctor.lastName}`.toLowerCase() : (a.doctorName || "").toLowerCase();
+      const dateText = getAppointmentDate(a) ? getAppointmentDate(a).toLocaleDateString() : (a.date || "");
+      return doctorName.includes(term) || (a.type || "").toLowerCase().includes(term) || dateText.includes(term);
+    });
+    renderAppointments(filtered);
+    scheduleNotifications(filtered);
+  } catch (err) {
+    console.error("Search error:", err);
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => { fetchAppointments(); });
+  </script>
+</body>
+</html>

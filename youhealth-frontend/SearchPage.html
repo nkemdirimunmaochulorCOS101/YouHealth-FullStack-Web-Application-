@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouHealth Search</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f3f4f6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .specialty-button {
+      transition: all 0.3s ease;
+    }
+    .specialty-button.active {
+      transform: scale(1.05);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                  0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      background-color: #d1e5f8;
+      color: #1e40af;
+    }
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      transition: opacity 0.3s ease;
+    }
+    .modal-content {
+      max-height: 90vh;
+    }
+  </style>
+</head>
+<body class="bg-blue-900 text-gray-800">
+
+<header class="bg-white shadow-sm sticky top-0 z-50">
+  <div class="flex items-center justify-between max-w-7xl mx-auto px-4 py-2 md:px-6">
+    <div class="flex items-center space-x-2">
+      <img src="istockphoto-1321617070-612x612-removebg-preview.png"
+           onerror="this.onerror=null;this.src='https://placehold.co/40x40/e2e8f0/4b5563?text=YH';"
+           alt="YouHealth Logo" class="h-10 w-10 rounded-xl">
+      <a href="YouHealthHomepage.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer">YouHealth</a>
+    </div>
+    <nav class="hidden md:flex flex-1 justify-center space-x-8">
+      <a href="Healthdashboard.html" class="font-medium text-gray-600 hover:text-blue-900 transition duration-300">Dashboard</a>
+      <a href="#Search.Page" class="font-bold text-blue-900 hover:text-blue-900 transition duration-300">Search</a>
+      <a href="Appointmentspage.html" class="font-medium text-gray-900 hover:text-blue-900 transition duration-300">Appointments</a>
+      <a href="Medicationspage.html" class="font-medium text-gray-900 hover:text-blue-900 transition duration-300">Medications</a>
+      <a href="Settings.html" class="font-medium text-gray-900 hover:text-blue-900 transition duration-300">Settings</a>
+    </nav>
+    <div class="flex items-center space-x-4">
+      <button id="sign-out-desktop" class="hidden md:block px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105 text-sm">Log Out</button>
+    </div>
+  </div>
+</header>
+
+<main class="flex-1 p-4 md:p-8 overflow-y-auto">
+  <div class="max-w-7xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 text-center">Find a Doctor</h2>
+
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+      <div class="flex flex-col md:flex-row items-center gap-4">
+        <div class="relative w-full">
+          <input type="text" id="doctor-search" placeholder="Search for a doctor or specialty..."
+                 class="w-full px-5 py-3 pr-12 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 text-gray-700 placeholder-gray-400">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               class="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 text-gray-400"
+               fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div id="results-container"
+         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </div>
+</main>
+
+<!-- Doctor Profile Modal -->
+<div id="doctor-profile-modal"
+     class="modal-overlay hidden opacity-0 transition-opacity duration-300">
+  <div class="modal-content bg-white rounded-2xl shadow-2xl p-6 md:p-8 w-11/12 max-w-xl mx-4 overflow-y-auto transform scale-95 opacity-0 transition-all duration-300">
+    <div class="flex justify-between items-center mb-6">
+      <h3 id="profile-name" class="text-2xl font-bold text-gray-900"></h3>
+      <button id="close-modal-btn" class="text-gray-500 hover:text-gray-800 transition-colors duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="flex flex-col items-center text-center">
+      <img id="profile-photo"
+           src="https://placehold.co/120x120/e2e8f0/4b5563?text=Dr"
+           alt="Doctor Photo"
+           class="rounded-full w-24 h-24 mb-4 object-cover border-4 border-white shadow-lg">
+      <p id="profile-specialty" class="text-gray-600 font-medium mb-2"></p>
+      <div id="profile-rating"
+           class="flex items-center justify-center mb-4 text-yellow-500"></div>
+    </div>
+
+    <div class="space-y-6 mt-6">
+      <div class="bg-gray-50 rounded-lg p-4">
+        <h4 class="text-lg font-semibold text-gray-700 mb-2">About</h4>
+        <p id="profile-about" class="text-gray-600 text-sm leading-relaxed"></p>
+      </div>
+
+      <div class="bg-gray-50 rounded-lg p-4">
+        <h4 class="text-lg font-semibold text-gray-700 mb-2">Email</h4>
+        <p id="profile-email" class="text-gray-600 text-sm"></p>
+      </div>
+
+      <div class="bg-gray-50 rounded-lg p-4">
+        <h4 class="text-lg font-semibold text-gray-700 mb-2">Phone</h4>
+        <p id="profile-phone" class="text-gray-600 text-sm"></p>
+      </div>
+
+      <div class="bg-gray-50 rounded-lg p-4">
+        <h4 class="text-lg font-semibold text-gray-700 mb-2">Qualifications</h4>
+        <p id="profile-qualifications" class="text-gray-600 text-sm"></p>
+      </div>
+
+      <div class="bg-gray-50 rounded-lg p-4">
+        <h4 class="text-lg font-semibold text-gray-700 mb-4">Availability</h4>
+        <div id="profile-availability"
+             class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <button id="book-appointment-btn"
+              class="w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
+        Book Appointment
+      </button>
+    </div>
+  </div>
+</div>
+
+<footer class="bg-white shadow-md mt-auto">
+  <div class="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto p-4 text-sm text-gray-600">
+    <div>© 2025 YouHealth</div>
+    <div class="mt-2 md:mt-0 flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4 text-center">
+      <span>Made simple</span>
+      <a href="#" class="hover:text-blue-600 transition duration-300">Privacy</a>
+      <a href="#" class="hover:text-blue-600 transition duration-300">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const token = localStorage.getItem("token");
+let allPractitioners = [];
+
+async function fetchPractitioners() {
+  try {
+    const res = await fetch("http://localhost:3000/practitioners", {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error("Failed to fetch practitioners");
+    allPractitioners = await res.json();
+    renderPractitioners(allPractitioners);
+  } catch (err) {
+    console.error("Error fetching practitioners:", err);
+  }
+}
+
+function renderPractitioners(practitioners) {
+  const container = document.getElementById("results-container");
+  container.innerHTML = "";
+
+  if (!practitioners.length) {
+    container.innerHTML = "<p class='text-center text-gray-500 py-8 col-span-full'>No practitioners found.</p>";
+    return;
+  }
+
+  practitioners.forEach(p => {
+    const card = document.createElement("div");
+    card.className =
+      "bg-white rounded-xl shadow-lg hover:shadow-2xl transition transform hover:scale-[1.02] p-6 text-center cursor-pointer";
+    card.dataset.id = p.id;
+
+    // 🔹 Add cache-busting query string
+    const profileImg = p.profileImage 
+      ? `${p.profileImage}?t=${new Date().getTime()}`
+      : "https://placehold.co/100x100?text=👤";
+
+    card.innerHTML = `
+      <div class="flex justify-center mb-4">
+        <img src="${profileImg}"
+             alt="Doctor Photo"
+             class="w-24 h-24 rounded-full border-4 border-gray-200 shadow-md object-cover">
+      </div>
+      <h3 class="text-xl font-bold text-gray-900 mb-1">${p.firstName} ${p.lastName}</h3>
+      <p class="text-gray-600 mb-1"><strong>${p.specialty || "General Practitioner"}</strong></p>
+      <p class="text-gray-600">${p.email || "Not provided"}</p>
+    `;
+
+    card.addEventListener("click", () => openProfileModal(p.id));
+    container.appendChild(card);
+  });
+}
+
+
+function openProfileModal(id) {
+  const doctor = allPractitioners.find(p => p.id == id);
+  if (!doctor) return;
+
+  const details = doctor.practitionerDetails || doctor;
+
+  document.getElementById("profile-name").textContent =
+    `${doctor.firstName || ""} ${doctor.lastName || ""}`;
+
+  // 🔹 Add cache-busting query string here too
+  document.getElementById("profile-photo").src =
+    doctor.profileImage 
+      ? `${doctor.profileImage}?t=${new Date().getTime()}`
+      : "https://placehold.co/120x120?text=👤";
+
+  document.getElementById("profile-specialty").textContent =
+    doctor.specialty || "General Practitioner";
+
+  document.getElementById("profile-about").textContent =
+    details.bio || details.about || "No information provided.";
+
+  document.getElementById("profile-email").textContent =
+    doctor.email || "Not provided";
+
+  document.getElementById("profile-phone").textContent =
+    doctor.phonenumber || "Not provided";
+
+  document.getElementById("profile-qualifications").textContent =
+    details.qualifications || "No qualifications listed.";
+
+  const ratingEl = document.getElementById("profile-rating");
+  ratingEl.innerHTML = doctor.rating
+    ? "⭐".repeat(Math.round(doctor.rating))
+    : "⭐️⭐️⭐️⭐️";
+
+  const availabilityEl = document.getElementById("profile-availability");
+  availabilityEl.innerHTML = "";
+  const availability = details.availability || [];
+  if (availability.length) {
+    availability.forEach(slot => {
+      const div = document.createElement("div");
+      div.className =
+        "px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium";
+      div.textContent = slot;
+      availabilityEl.appendChild(div);
+    });
+  } else {
+    availabilityEl.innerHTML = `<p class="text-gray-500 text-sm">No availability listed.</p>`;
+  }
+
+  // Show modal
+  const modal = document.getElementById("doctor-profile-modal");
+  const content = modal.querySelector(".modal-content");
+  modal.classList.remove("hidden");
+  setTimeout(() => {
+    modal.classList.remove("opacity-0");
+    content.classList.remove("opacity-0", "scale-95");
+  }, 50);
+}
+
+
+// --- Close Modal ---
+document.getElementById("close-modal-btn").addEventListener("click", closeProfileModal);
+document.getElementById("doctor-profile-modal").addEventListener("click", (e) => {
+  if (e.target === e.currentTarget) closeProfileModal();
+});
+function closeProfileModal() {
+  const modal = document.getElementById("doctor-profile-modal");
+  const content = modal.querySelector(".modal-content");
+  modal.classList.add("opacity-0");
+  content.classList.add("opacity-0", "scale-95");
+  setTimeout(() => modal.classList.add("hidden"), 300);
+}
+
+// --- Search filter ---
+document.getElementById("doctor-search").addEventListener("input", (e) => {
+  const searchTerm = e.target.value.toLowerCase();
+  const filtered = allPractitioners.filter(p =>
+    `${p.firstName} ${p.lastName}`.toLowerCase().includes(searchTerm) ||
+    (p.specialization || "").toLowerCase().includes(searchTerm) ||
+    (p.email || "").toLowerCase().includes(searchTerm) ||
+    (p.phone || "").toLowerCase().includes(searchTerm)
+  );
+  renderPractitioners(filtered);
+});
+
+document.addEventListener("DOMContentLoaded", fetchPractitioners);
+</script>
+</body>
+</html>

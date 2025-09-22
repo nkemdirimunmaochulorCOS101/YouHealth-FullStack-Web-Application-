@@ -1,0 +1,131 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Model: Represents both patients and medical practitioners
+model User {
+  id                    String          @id @default(uuid())
+  firstName             String
+  lastName              String
+  username              String          @unique
+  email                 String          @unique
+  password              String // Store hashed passwords, not plain text!
+  role                  Role            @default(PATIENT) // Enum for 'PATIENT', 'PRACTITIONER', or 'ADMIN'
+  specialty             String? // Null for PATIENTs
+  profileImage String?   
+  // 👇 New fields
+  qualifications String?
+  phonenumber    String?
+  address        String?
+  about          String?
+  availabletime  String?
+
+  resetToken       String? 
+resetTokenExpiry DateTime?
+
+  
+
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @default(now()) @updatedAt
+
+  // Relationships
+  appointmentsAsPatient Appointment[] @relation("PatientAppointments")
+  appointmentsAsDoctor  Appointment[] @relation("DoctorAppointments")
+  medications           Medication[]  // ✅ allows a user to have many medications
+  healthVitals          HealthVitals[]
+  messagesAsSender      Message[]     @relation("SenderMessages")
+  messagesAsReceiver    Message[]     @relation("ReceiverMessages")
+}
+
+enum Role {
+  PATIENT
+  PRACTITIONER
+  ADMIN
+}
+
+// Appointment Model: Links patients and doctors for appointments
+model Appointment {
+  id        String          @id @default(uuid())
+  dateTime  DateTime
+  status    AppointmentStatus @default(PENDING) // 'Scheduled', 'Completed', 'Cancelled'
+  type      AppointmentType 
+  details   String?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  
+  // Patient relationship
+  patientId String
+  patient   User            @relation("PatientAppointments", fields: [patientId], references: [id])
+
+  // Doctor relationship
+  doctorId  String
+  doctor    User            @relation("DoctorAppointments", fields: [doctorId], references: [id])
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum AppointmentType {
+  IN_PERSON
+  TELEHEALTH
+}
+
+// Medication Model: Stores prescription details
+model Medication {
+  id            String   @id @default(uuid())
+  name          String
+  dosage        Int
+  frequency     Int
+  instructions  String
+  status        String   @default("ACTIVE") // 'Active' or 'Inactive'
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Patient relationship
+  patientId     String
+  patient       User     @relation(fields: [patientId], references: [id])
+}
+
+// Health Vitals Model: Stores health metrics like blood pressure
+model HealthVitals {
+  id              String   @id @default(uuid())
+  bloodPressure   String
+  oxygenSaturation Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Patient relationship
+  patientId       String
+  patient         User     @relation(fields: [patientId], references: [id])
+}
+
+// Message Model: Handles communication between users
+model Message {
+  id          String   @id @default(uuid())
+  content     String
+  sentAt      DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Sender relationship
+  senderId    String
+  sender      User     @relation("SenderMessages", fields: [senderId], references: [id])
+
+  // Receiver relationship
+  receiverId  String
+  receiver    User     @relation("ReceiverMessages", fields: [receiverId], references: [id])
+}
+
+

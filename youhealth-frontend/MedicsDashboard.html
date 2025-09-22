@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YouHealth Practitioner Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .filter-button.active {
+      background-color: #1e3a8a; color: white;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1); transform: scale(1.05);
+    }
+    .nav-link.active {
+      font-weight: 700; color: #1e3a8a;
+      border-bottom: 2px solid #1e3a8a; padding-bottom: 2px;
+    }
+    .page-content { display: none; }
+    .page-content.active { display: flex; flex-direction: column; flex-grow: 1; }
+    .spinner { border: 4px solid rgba(0,0,0,0.1); width: 36px; height: 36px;
+      border-radius: 50%; border-left-color: #3b82f6; animation: spin 1s ease infinite; }
+    @keyframes spin { 0% {transform:rotate(0);} 100%{transform:rotate(360deg);} }
+    .appointment-card:hover { background-color: #1e3a8a; transform: scale(1.02); transition: 0.2s; color:white; }
+    /* small result styling */
+    .search-result { cursor: pointer; padding: 0.5rem; border-radius: 0.5rem; background: #f8fafc; }
+    .search-result:hover { background: #eef2ff; }
+  </style>
+</head>
+<body class="bg-blue-900 text-slate-800">
+
+<header class="bg-white shadow-sm sticky top-0 z-50">
+  <div class="flex items-center justify-between max-w-7xl mx-auto px-4 py-2 md:px-6">
+  <!-- Logo -->
+  <div class="flex items-center space-x-2">
+    <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="h-10 w-10 rounded-xl">
+    <a href="YouHealthHomepage.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer">YouHealth</a>
+  </div>
+
+  <!-- Desktop nav (centered) -->
+  <nav class="hidden md:flex space-x-8 mx-auto">
+    <a href="#dashboard-page" class="nav-link font-bold text-blue-900 active">Dashboard</a>
+    <a href="Medicspatientpage.html" class="nav-link">Patients</a>
+    <a href="MedicsSchedulepage.html" class="nav-link">Tasks</a>
+    <a href="MedicsSettingspage.html" class="nav-link">Settings</a>
+  </nav>
+
+  <!-- Right section -->
+  <div class="flex items-center space-x-4">
+    <!-- Hamburger button (mobile only) -->
+    <button id="hamburger-btn" class="md:hidden text-blue-900 focus:outline-none" aria-label="Open menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+
+    <!-- Sign out -->
+    <button id="sign-out-btn" class="hidden sm:block px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-700 transition">
+      Log Out
+    </button>
+  </div>
+</div>
+
+
+ </header> 
+
+  <div id="mobile-menu" class="hidden md:hidden absolute top-16 left-3 w-full bg-white shadow-lg z-40">
+            <nav class="flex flex-col items-center py-4 space-y-4">
+                <a href="#" class="nav-link text-lg font-bold text-blue-900 hover:text-blue-900 transition duration-300">Dashboard</a>
+                <a href="Medicspatientpage.html" class="nav-link text-lg font-medium text-gray-600 hover:text-blue-900 transition duration-300">Patients</a>
+                <a href="MedicsSchedulepage.html" class="nav-link text-lg font-medium text-gray-600 hover:text-blue-900 transition duration-300">Tasks</a>
+                <a href="MedicsSettingspage.html" class="nav-link text-lg font-medium text-gray-600 hover:text-blue-900 transition duration-300">Settings</a>
+                <button class="w-full text-center text-lg font-medium py-2 px-4 rounded-full text-white bg-blue-900 hover:bg-blue-700 transition duration-300 mt-4">Log Out</button>
+            </nav>
+        </div>
+
+<div class="flex-1 p-4 md:p-8 overflow-y-auto">
+  <main id="dashboard-page" class="page-content active max-w-7xl mx-auto">
+
+    <h2 id="greeting" class="text-3xl md:text-4xl font-bold text-white mb-6">Hello!</h2>
+
+    <!-- Dashboard Cards -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">Today's Schedule</h3>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div id="filter-all" class="p-4 rounded-xl cursor-pointer bg-blue-100 text-center" data-filter="ALL" aria-role="button">
+          <p class="text-sm font-medium text-blue-800">Total Patients</p>
+          <p id="total-appointments-count" class="text-2xl font-bold text-blue-900">--</p>
+        </div>
+        <div id="filter-completed" class="p-4 rounded-xl cursor-pointer bg-green-100 text-center" data-filter="COMPLETED" aria-role="button">
+          <p class="text-sm font-medium text-green-800">Completed</p>
+          <p id="completed-appointments-count" class="text-2xl font-bold text-green-900">--</p>
+        </div>
+        <div id="filter-upcoming" class="p-4 rounded-xl cursor-pointer bg-yellow-100 text-center" data-filter="UPCOMING" aria-role="button">
+          <p class="text-sm font-medium text-yellow-800">Upcoming</p>
+          <p id="upcoming-appointments-count" class="text-2xl font-bold text-yellow-900">--</p>
+        </div>
+        <div id="filter-cancelled" class="p-4 rounded-xl cursor-pointer bg-red-100 text-center" data-filter="CANCELLED" aria-role="button">
+          <p class="text-sm font-medium text-red-800">Cancelled</p>
+          <p id="cancelled-appointments-count" class="text-2xl font-bold text-red-900">--</p>
+        </div>
+      </div>
+
+      <!-- Appointments -->
+      <div id="loading-spinner" class="flex justify-center items-center py-8">
+        <div class="spinner"></div>
+      </div>
+      <div id="appointments-list" class="space-y-4"></div>
+    </div>
+
+    <!-- Patient Search -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">Search Patients</h3>
+      <div class="flex items-center space-x-2 mb-4">
+        <input id="patient-search-input" type="text" placeholder="Enter patient name..." autocomplete="off" class="flex-1 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <button id="patient-search-btn" class="bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Search</button>
+      </div>
+      <div id="search-results" class="space-y-2"></div>
+    </div>
+
+  </main>
+</div>
+
+<script type="module">
+const API_BASE = "http://localhost:3000";
+let allAppointments = [];
+let currentFilter = "ALL";
+
+const token = localStorage.getItem("token");
+const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser") || "null");
+if (!token || !loggedInUser) {
+  // Redirect to login if missing
+  window.location.href = "Loginpage.html";
+}
+
+const currentUserId = loggedInUser.userId || loggedInUser.id;
+
+// Greeting
+document.addEventListener("DOMContentLoaded", () => {
+  const greeting = document.getElementById("greeting");
+  if (greeting) {
+    const name = loggedInUser.firstName || loggedInUser.lastName || loggedInUser.fullName || loggedInUser.email;
+    greeting.textContent = `Hello, ${name}!`;
+  }
+});
+
+// Hamburger toggle
+const hamburgerBtn = document.getElementById("hamburger-btn");
+const mobileMenu = document.getElementById("mobile-menu");
+if (hamburgerBtn && mobileMenu) {
+  hamburgerBtn.addEventListener("click", () => mobileMenu.classList.toggle("hidden"));
+}
+
+// Utility: determine if appointment matches filter
+function matchesFilter(app, filter) {
+  const s = (app.status || "").toUpperCase();
+  if (filter === "ALL") return true;
+  if (filter === "UPCOMING") return ["PENDING","CONFIRMED","UPCOMING"].includes(s);
+  if (filter === "COMPLETED") return s === "COMPLETED";
+  if (filter === "CANCELLED") return s === "CANCELLED";
+  return true;
+}
+
+// Fetch appointments (practitioner-only)
+async function fetchAppointments() {
+  try {
+    document.getElementById("loading-spinner").style.display = "flex";
+    if (loggedInUser.role !== "PRACTITIONER") {
+      document.getElementById("appointments-list").innerHTML = `<p class="text-red-500">You are not authorized to view this page.</p>`;
+      return;
+    }
+    const url = `${API_BASE}/appointments/practitioner/${currentUserId}`;
+    const res = await fetch(url, { headers: { "Authorization": `Bearer ${token}` } });
+    if (!res.ok) {
+      console.error("fetchAppointments status:", res.status);
+      throw new Error(`HTTP ${res.status}`);
+    }
+    allAppointments = await res.json();
+    renderAppointments();
+  } catch (err) {
+    console.error("Error fetching appointments:", err);
+    document.getElementById("appointments-list").innerHTML = `<p class="text-red-500">Failed to load appointments.</p>`;
+  } finally {
+    document.getElementById("loading-spinner").style.display = "none";
+  }
+}
+
+// Render appointments with filter logic
+function renderAppointments() {
+  const container = document.getElementById("appointments-list");
+  container.innerHTML = "";
+
+  const filtered = allAppointments.filter(a => matchesFilter(a, currentFilter));
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<p class="text-gray-500">No appointments.</p>`;
+  } else {
+    filtered.forEach(app => {
+      const card = document.createElement("div");
+      card.className = "appointment-card bg-white p-4 rounded-lg shadow-md flex justify-between items-center";
+      const patientName = (app.patient && (app.patient.firstName || app.patient.lastName)) ? `${app.patient.firstName || ""} ${app.patient.lastName || ""}`.trim() : (app.patientName || "Unknown Patient");
+      const dateStr = app.dateTime ? new Date(app.dateTime).toLocaleString() : (app.date || "");
+      card.innerHTML = `
+        <div>
+          <h3 class="font-semibold text-blue-900">${patientName}</h3>
+          <p class="text-sm text-gray-500">${app.reason || ""}</p>
+        </div>
+        <div class="text-right">
+          <p class="text-sm">${dateStr}</p>
+          <span class="text-xs px-2 py-1 rounded-full ${
+            (app.status || "").toUpperCase() === "COMPLETED" ? "bg-green-100 text-green-600" :
+            (app.status || "").toUpperCase() === "CANCELLED" ? "bg-red-100 text-red-600" :
+            "bg-blue-100 text-blue-600"
+          }">${(app.status || "").toUpperCase() || "UPCOMING"}</span>
+        </div>`;
+      container.appendChild(card);
+    });
+  }
+
+  // Update counters using same matching logic
+  document.getElementById("total-appointments-count").textContent = allAppointments.length;
+  document.getElementById("completed-appointments-count").textContent = allAppointments.filter(a => matchesFilter(a, "COMPLETED")).length;
+  document.getElementById("upcoming-appointments-count").textContent = allAppointments.filter(a => matchesFilter(a, "UPCOMING")).length;
+  document.getElementById("cancelled-appointments-count").textContent = allAppointments.filter(a => matchesFilter(a, "CANCELLED")).length;
+}
+
+// Wire up filter-card clicks
+["filter-all","filter-completed","filter-upcoming","filter-cancelled"].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener("click", () => {
+    currentFilter = el.dataset.filter || "ALL";
+    // visual active class toggle
+    document.querySelectorAll('[data-filter]').forEach(d => d.classList.remove('ring-2','ring-blue-300'));
+    el.classList.add('ring-2','ring-blue-300');
+    renderAppointments();
+  });
+});
+
+// Debounced live search
+let searchTimeout = null;
+const searchInput = document.getElementById("patient-search-input");
+const searchResults = document.getElementById("search-results");
+const patientSearchBtn = document.getElementById("patient-search-btn");
+
+if (searchInput) {
+  searchInput.addEventListener("input", () => {
+    clearTimeout(searchTimeout);
+    const q = searchInput.value.trim();
+    if (!q) {
+      searchResults.innerHTML = "";
+      return;
+    }
+    searchTimeout = setTimeout(() => searchPatients(q), 300);
+  });
+}
+
+if (patientSearchBtn) {
+  patientSearchBtn.addEventListener("click", () => {
+    const q = searchInput.value.trim();
+    if (!q) return;
+    searchPatients(q);
+  });
+}
+
+async function searchPatients(query) {
+  searchResults.innerHTML = `<div class="text-sm text-gray-500">Searching...</div>`;
+  try {
+    const res = await fetch(`${API_BASE}/patients/search?name=${encodeURIComponent(query)}`, {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    if (!res.ok) {
+      console.error("searchPatients status:", res.status);
+      throw new Error(`HTTP ${res.status}`);
+    }
+    const patients = await res.json();
+    if (!Array.isArray(patients) || patients.length === 0) {
+      searchResults.innerHTML = `<div class="text-sm text-gray-500">No patients found.</div>`;
+      return;
+    }
+
+    // Render clickable results
+    searchResults.innerHTML = "";
+    patients.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "search-result flex items-center justify-between";
+      // clicking could go to patient details page (example)
+      const anchor = document.createElement("a");
+      anchor.href = `Medicspatientpage.html?id=${encodeURIComponent(p.id)}`;
+      anchor.textContent = `${p.firstName || ""} ${p.lastName || ""}`.trim() + (p.email ? ` — ${p.email}` : "");
+      anchor.className = "block w-full";
+      div.appendChild(anchor);
+      searchResults.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Search failed:", err);
+    searchResults.innerHTML = `<div class="text-sm text-red-500">Search failed — check console.</div>`;
+  }
+}
+
+// Initialize
+fetchAppointments();
+</script>
+</body>
+</html>

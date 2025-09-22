@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services - YouHealth</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    :root {
+      --brand: #1e3a8a;   /* Dark Blue */
+      --secondary-brand: #15306d;
+      --muted: #6b7280;
+      --bg: #f7f8fa;
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: #07103a;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(43, 96, 220, 0.151);
+      padding: 5px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .header-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .branding { display: flex; align-items: center; }
+    .header-logo { height: 45px; margin-right: 10px; }
+    .branding h1 { font-size: 1.5rem; color: var(--brand); margin: 0; }
+
+    /* Main Navigation */
+    .main-nav ul { display: flex; gap: 30px; margin: 0; padding: 0; list-style: none; }
+    .main-nav a {
+      text-decoration: none;
+      color: #555;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    .main-nav a:hover { color: var(--brand); }
+    .main-nav a.active { color: var(--brand); border-bottom: 2px solid var(--brand); padding-bottom: 2px; }
+
+    /* Auth Buttons */
+    .auth-links { display: flex; gap: 15px; }
+    .auth-links button {
+      background-color: var(--brand);
+      color: white;
+      padding: 6px 16px;
+      border: none;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .auth-links button:hover { background-color: var(--secondary-brand); }
+    .auth-links button:last-child { background-color: transparent; color: var(--brand); border: 1px solid var(--brand); }
+    .auth-links button:last-child:hover { background-color: var(--brand); color: white; }
+
+    /* Hamburger Menu */
+    .hamburger-menu { display: none; font-size: 1.8rem; background: none; border: none; cursor: pointer; color: var(--brand); }
+
+    /* Side Navigation */
+    .side-nav {
+      position: fixed;
+      top: 0;
+      right: -250px;
+      width: 250px;
+      height: 100%;
+      background: white;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+      transition: right 0.3s ease-in-out;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .side-nav.open { right: 0; }
+    .side-nav .close-menu { position: absolute; top: 10px; right: 20px; background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--muted); }
+    .side-nav ul { list-style: none; padding: 0; margin-top: 40px; }
+    .side-nav li { margin-bottom: 20px; }
+    .side-nav a { text-decoration: none; color: #555; font-weight: bold; font-size: 1.2rem; display: block; }
+    .side-nav .auth-links-mobile { display: flex; flex-direction: column; gap: 10px; margin-top: 30px; }
+    .side-nav .auth-links-mobile button { width: 100%; height: 40px; border-radius: 20px; }
+
+    /* Hero Section */
+    .hero { background: var(--brand); color: white; text-align: center; padding: 80px 20px; }
+    .hero h2 { font-size: 2.5rem; margin-bottom: 10px; }
+    .hero p { font-size: 1.2rem; }
+
+    /* Services Grid */
+    main { padding: 60px 20px; max-width: 1200px; margin: auto; flex-grow: 1; }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+    .service-card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    .service-card.visible { opacity: 1; transform: translateY(0); }
+    .service-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+    .service-card h3 { color: var(--brand); margin-bottom: 12px; font-size: 1.4rem; }
+    .service-card p { color: #444; line-height: 1.5; }
+
+    /* Footer */
+    footer { background: #1f2937; color: #e5e7eb; text-align: center; padding: 16px; margin-top: 40px; }
+
+    /* Responsive */
+    @media (max-width: 880px) {
+      .main-nav, .auth-links { display: none; }
+      .hamburger-menu { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-wrapper">
+      <div class="branding">
+        <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="header-logo">
+        <h1>YouHealth</h1>
+      </div>
+
+      <!-- Main Nav -->
+      <nav class="main-nav">
+        <ul>
+          <li><a href="YouHealthHomepage.html">Home</a></li>
+          <li><a href="Aboutus.html">About Us</a></li>
+          <li><a href="Services.html" class="active">Services</a></li>
+          <li><a href="Contactus.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- Auth Links -->
+      <div class="auth-links">
+        <a href="Whoareyoupage.html"><button>Sign Up</button></a>
+        <a href="Loginpage.html"><button>Log In</button></a>
+      </div>
+
+      <!-- Hamburger Menu -->
+      <button class="hamburger-menu" aria-label="Open navigation menu">&#9776;</button>
+    </div>
+
+    <!-- Side Navigation -->
+    <nav class="side-nav" id="side-nav">
+      <button class="close-menu" aria-label="Close navigation menu">&times;</button>
+      <ul>
+        <li><a href="YouHealthHomepage.html">Home</a></li>
+        <li><a href="Aboutus.html">About Us</a></li>
+        <li><a href="Services.html" class="active">Services</a></li>
+        <li><a href="Contactus.html">Contact</a></li>
+      </ul>
+      <div class="auth-links-mobile">
+        <a href="Whoareyoupage.html"><button>Sign Up</button></a>
+        <a href="Loginpage.html"><button>Log In</button></a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h2>Our Services</h2>
+    <p>Discover all the features and functionalities that make YouHealth your trusted healthcare companion.</p>
+  </section>
+
+  <!-- Services Grid -->
+  <main>
+    <div class="services-grid">
+      <div class="service-card"><h3>📅 Appointment Scheduling</h3><p>Effortlessly book and manage your medical appointments with our easy-to-use scheduling system.</p></div>
+      <div class="service-card"><h3>🧾 Patient Record Management</h3><p>Securely store and update patient health records with instant access for authorized users.</p></div>
+      <div class="service-card"><h3>💊 Medication Tracking</h3><p>Keep track of prescriptions and dosages, and receive reminders for medication schedules.</p></div>
+      <div class="service-card"><h3>📊 Health Analytics</h3><p>Access insights and analytics to monitor progress, trends, and overall health status.</p></div>
+      <div class="service-card"><h3>👩‍⚕️ Doctor-Patient Communication</h3><p>Stay connected with healthcare professionals through secure messaging and consultation features.</p></div>
+      <div class="service-card"><h3>🔒 Secure Data Protection</h3><p>Your data is protected with industry-grade encryption and security best practices.</p></div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 YouHealth. All rights reserved.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Animate service cards
+    const cards = document.querySelectorAll(".service-card");
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    cards.forEach(card => observer.observe(card));
+
+    // Hamburger menu functionality
+    const hamburger = document.querySelector('.hamburger-menu');
+    const sideNav = document.querySelector('.side-nav');
+    const closeBtn = document.querySelector('.close-menu');
+
+    hamburger.addEventListener('click', () => sideNav.classList.add('open'));
+    closeBtn.addEventListener('click', () => sideNav.classList.remove('open'));
+    document.querySelectorAll('.side-nav a').forEach(link => {
+      link.addEventListener('click', () => sideNav.classList.remove('open'));
+    });
+  </script>
+</body>
+</html>

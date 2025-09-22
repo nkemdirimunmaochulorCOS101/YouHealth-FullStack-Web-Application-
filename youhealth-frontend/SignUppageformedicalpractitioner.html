@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account (Medical Practitioner)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-image: url('5494d691-c601-437a-9d3e-909caf58f1d8.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: -1;
+    }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(100px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .slide-in-card { animation: slideInRight 1s ease-out forwards; }
+    .input-error { border: 2px solid red; }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+  <div class="max-w-md w-full">
+    <div class="flex items-center justify-center mb-8 slide-in-card">
+      <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="h-10 w-10 mr-4 rounded-lg drop-shadow-lg">
+      <h1 class="text-3xl font-bold tracking-widest text-white drop-shadow-lg">YouHealth</h1>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-2xl p-8 slide-in-card">
+      <h3 class="text-2xl font-semibold text-center text-gray-800 mb-6">Sign Up</h3>
+      
+      <form id="signup-form" class="space-y-5">
+        <div><input type="text" id="firstName" name="firstName" placeholder="Enter First Name" class="w-full px-4 py-2 border border-gray-300 rounded-lg"></div>
+        <div><input type="text" id="lastName" name="lastName" placeholder="Enter Last Name" class="w-full px-4 py-2 border border-gray-300 rounded-lg"></div>
+        <div><input type="text" id="username" name="username" placeholder="Enter Username" class="w-full px-4 py-2 border border-gray-300 rounded-lg"></div>
+        <div><input type="email" id="email" name="email" placeholder="Enter Email" class="w-full px-4 py-2 border border-gray-300 rounded-lg"></div>
+        
+        <!-- Password with toggle + strength meter -->
+        <div class="relative">
+          <input type="password" id="password" name="password" placeholder="Enter Password" class="w-full px-4 py-2 border border-gray-300 rounded-lg pr-10">
+          <button type="button" id="toggle-password" class="absolute inset-y-0 right-2 flex items-center text-gray-600">
+            👁️
+          </button>
+          <p id="password-strength" class="text-sm mt-1"></p>
+        </div>
+
+        <div><input type="text" id="specialty" name="specialty" placeholder="Enter Specialty (e.g., Cardiology)" class="w-full px-4 py-2 border border-gray-300 rounded-lg"></div>
+
+        <button type="submit" class="w-full py-2.5 px-4 rounded-lg bg-blue-900 text-white font-semibold hover:bg-blue-700 transition">
+          Next
+        </button>
+      </form>
+
+      <p id="signup-message" class="text-center text-sm mt-4"></p>
+    </div>
+  </div>
+
+<script>
+const passwordInput = document.getElementById("password");
+const strengthText = document.getElementById("password-strength");
+const togglePassword = document.getElementById("toggle-password");
+
+// Toggle show/hide password
+togglePassword.addEventListener("click", () => {
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    togglePassword.textContent = "🙈";
+  } else {
+    passwordInput.type = "password";
+    togglePassword.textContent = "👁️";
+  }
+});
+
+// Password strength meter
+passwordInput.addEventListener("input", () => {
+  const password = passwordInput.value;
+  const regex = {
+    length: /.{8,}/,
+    uppercase: /[A-Z]/,
+    lowercase: /[a-z]/,
+    number: /[0-9]/,
+    special: /[!@#$%^&*(),.?":{}|<>]/
+  };
+
+  let passed = 0;
+  for (let key in regex) {
+    if (regex[key].test(password)) passed++;
+  }
+
+  if (!password) {
+    strengthText.textContent = "";
+    return;
+  }
+
+  if (passed <= 2) {
+    strengthText.textContent = "Weak password";
+    strengthText.style.color = "red";
+  } else if (passed === 3 || passed === 4) {
+    strengthText.textContent = "Medium strength password";
+    strengthText.style.color = "orange";
+  } else if (passed === 5) {
+    strengthText.textContent = "Strong password";
+    strengthText.style.color = "green";
+  }
+});
+
+document.getElementById("signup-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const firstName = document.getElementById("firstName").value.trim();
+  const lastName = document.getElementById("lastName").value.trim();
+  const username = document.getElementById("username").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const specialty = document.getElementById("specialty").value.trim();
+
+  const messageElement = document.getElementById("signup-message");
+  messageElement.textContent = '';
+  messageElement.style.color = 'red';
+
+  document.querySelectorAll('input').forEach(input => input.classList.remove('input-error'));
+
+  if (!firstName || !lastName || !username || !email || !password || !specialty) {
+    messageElement.textContent = "Please fill in all fields.";
+    if (!firstName) document.getElementById("firstName").classList.add('input-error');
+    if (!lastName) document.getElementById("lastName").classList.add('input-error');
+    if (!username) document.getElementById("username").classList.add('input-error');
+    if (!email) document.getElementById("email").classList.add('input-error');
+    if (!password) document.getElementById("password").classList.add('input-error');
+    if (!specialty) document.getElementById("specialty").classList.add('input-error');
+    return;
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    messageElement.textContent = "Please enter a valid email address.";
+    document.getElementById("email").classList.add('input-error');
+    return;
+  }
+
+  const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+  if (!passwordRegex.test(password)) {
+    messageElement.textContent = "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.";
+    document.getElementById("password").classList.add('input-error');
+    return;
+  }
+
+  const data = { firstName, lastName, username, email, password, role: "PRACTITIONER", specialty };
+
+  try {
+    const res = await fetch("http://localhost:3000/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+
+    if (res.ok) {
+      localStorage.clear();
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('userProfile', JSON.stringify(result.user));
+      window.location.href = "more_details.html";
+    } else {
+      messageElement.textContent = result.error || "Signup failed!";
+      messageElement.style.color = "red";
+    }
+  } catch (err) {
+    console.error("Error:", err);
+    messageElement.textContent = "Error connecting to server.";
+    messageElement.style.color = "red";
+  }
+});
+</script>
+
+</body>
+</html>
+

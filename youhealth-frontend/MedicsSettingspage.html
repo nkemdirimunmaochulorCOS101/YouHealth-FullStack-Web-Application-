@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Settings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .input-error { border: 2px solid red; }
+  </style>
+</head>
+<body class="bg-blue-900 text-gray-800">
+
+    <!-- ✅ Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="flex items-center justify-between max-w-7xl mx-auto px-4 py-2 md:px-6">
+            <div class="flex items-center space-x-2">
+                <img src="istockphoto-1321617070-612x612-removebg-preview.png" onerror="this.onerror=null;this.src='https://placehold.co/40x40/e2e8f0/4b5563?text=YH';" alt="YouHealth Logo" class="h-10 w-10 rounded-xl">
+                <a href="YouHealthHomepage.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer">YouHealth</a>
+            </div>
+
+            <nav class="hidden md:flex flex-1 justify-center space-x-8">
+                <a href="Healthdashboard.html" class="font-medium text-gray-600 hover:text-blue-900 transition duration-300">Dashboard</a>
+                <a href="Medicspatientpage.html" class="font-medium text-gray-600 hover:text-blue-900 transition duration-300">Patients</a>
+                <a href="Medicspatientpage.html" class="font-medium text-gray-900 hover:text-blue-900 transition duration-300">Tasks</a>
+                <a href="#Settings.html" class="font-bold text-blue-900 hover:text-blue-900 transition duration-300">Settings</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <button id="sign-out-desktop" class="hidden md:block px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105 text-sm">Log Out</button>
+
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-md text-gray-600 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ✅ Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg z-40 transition-transform transform duration-300 ease-in-out">
+        <div class="flex flex-col items-center py-4 space-y-2">
+            <a href="Healthdashboard.html" class="w-full text-center py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Dashboard</a>
+            <a href="Medicspatientpage.html" class="w-full text-center py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Patients</a>
+            <a href="Medicspatientpage.html" class="font-medium text-gray-900 hover:text-blue-900 transition duration-300">Tasks</a>
+            <a href="#Settings.html" class="w-full text-center py-2 text-blue-900 font-bold bg-gray-100 rounded-lg">Settings</a>
+            <button id="sign-out-mobile" class="w-2/3 mt-4 py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105">Log Out</button>
+        </div>
+    </div>
+
+  <!-- ✅ Main Content -->
+  <main class="flex-grow flex items-center justify-center p-6">
+    <div class="bg-white shadow-lg rounded-xl w-full max-w-lg p-6">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">⚙️ Account Settings</h2>
+
+      <form id="settings-form" class="space-y-4">
+        <!-- 👤 Profile Photo -->
+        <div class="flex flex-col items-center space-y-2">
+          <img id="profilePreview" src="https://placehold.co/100x100?text=👤" class="w-24 h-24 rounded-full border shadow-md object-cover" alt="Profile Photo">
+          <input type="file" id="profileImage" accept="image/*" class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200" />
+        </div>
+
+        <div>
+          <label class="block text-gray-600">Full Name</label>
+          <input type="text" id="fullName" class="w-full border rounded p-2" />
+        </div>
+        <div>
+          <label class="block text-gray-600">Email</label>
+          <input type="email" id="email" class="w-full border rounded p-2" />
+        </div>
+        <div>
+          <label class="block text-gray-600">Username</label>
+          <input type="text" id="username" class="w-full border rounded p-2" />
+        </div>
+        <div>
+          <label class="block text-gray-600">Specialty (if Practitioner)</label>
+          <input type="text" id="specialty" class="w-full border rounded p-2" />
+        </div>
+        <div>
+          <label class="block text-gray-600">Password</label>
+          <input type="password" id="password" class="w-full border rounded p-2" placeholder="Enter new password" />
+        </div>
+
+        <p id="settings-message" class="text-center font-medium"></p>
+
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg w-full">
+          💾 Save Changes
+        </button>
+      </form>
+
+      <!-- ✅ Delete Account Button -->
+      <button id="deleteBtn" class="mt-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full">
+        🗑️ Delete Account
+      </button>
+    </div>
+  </main>
+
+  <!-- ✅ Footer -->
+  <footer class="bg-white shadow-md mt-auto">
+        <div class="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto p-4 text-sm text-gray-600">
+            <div>© 2025 YouHealth</div>
+            <div class="mt-2 md:mt-0 flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4 text-center">
+                <span>Made simple</span>
+                <a href="#" class="hover:text-blue-600 transition duration-300">Privacy</a>
+                <a href="#" class="hover:text-blue-600 transition duration-300">Contact</a>
+            </div>
+        </div>
+  </footer>
+
+  
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const form = document.getElementById("settings-form");
+  const messageElement = document.getElementById("settings-message");
+  const deleteBtn = document.getElementById("deleteBtn");
+  const profilePreview = document.getElementById("profilePreview");
+  const profileInput = document.getElementById("profileImage");
+
+  // 1️⃣ Get token from URL or localStorage
+  let token = localStorage.getItem("token");
+  const urlParams = new URLSearchParams(window.location.search);
+  if (!token && urlParams.has("token")) {
+    token = urlParams.get("token");
+    localStorage.setItem("token", token);
+  }
+
+  if (!token) {
+    messageElement.textContent = "⚠️ You are not logged in. Please log in first.";
+    messageElement.style.color = "red";
+    return;
+  }
+
+  // 2️⃣ Load user profile
+  async function loadUserProfile() {
+    try {
+      const res = await fetch("http://localhost:3000/api/user/me", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        console.error("Profile fetch failed:", res.status, errorData);
+        throw new Error(errorData.error || "Failed to load profile");
+      }
+
+      const user = await res.json();
+
+      // Save profile in localStorage
+      localStorage.setItem("userProfile", JSON.stringify(user));
+
+      // Fill form fields
+      document.getElementById("fullName").value = user.fullName || "";
+      document.getElementById("email").value = user.email || "";
+      document.getElementById("username").value = user.username || "";
+      document.getElementById("specialty").value = user.specialty || "";
+      
+
+      if (user.profileImage) {
+        profilePreview.src = user.profileImage;
+      }
+
+      messageElement.textContent = "";
+    } catch (err) {
+      console.error("Error loading profile:", err);
+      messageElement.textContent = "⚠️ Could not load profile. Please try again.";
+      messageElement.style.color = "red";
+    }
+  }
+
+  await loadUserProfile();
+
+  // 3️⃣ Preview image when selecting a file
+  profileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        profilePreview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // 4️⃣ Handle form submission (Update)
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const fullName = document.getElementById("fullName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const username = document.getElementById("username").value.trim();
+    const specialty = document.getElementById("specialty").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const profileFile = profileInput.files[0];
+
+    const formData = new FormData();
+    formData.append("fullName", fullName);
+    formData.append("email", email);
+    formData.append("username", username);
+    formData.append("specialty", specialty);
+    if (password) formData.append("password", password);
+    if (profileFile) formData.append("profileImage", profileFile);
+
+    try {
+      const res = await fetch("http://localhost:3000/api/user/update", {
+        method: "PUT",
+        headers: { "Authorization": `Bearer ${token}` },
+        body: formData
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        messageElement.textContent = "✅ Profile updated successfully!";
+        messageElement.style.color = "green";
+        await loadUserProfile();
+      } else {
+        messageElement.textContent = result.error || "⚠️ Update failed!";
+        messageElement.style.color = "red";
+      }
+    } catch (err) {
+      console.error("Update error:", err);
+      messageElement.textContent = "⚠️ Server error. Try again later.";
+      messageElement.style.color = "red";
+    }
+  });
+
+  // 5️⃣ Handle account deletion
+  deleteBtn.addEventListener("click", async () => {
+    if (!confirm("⚠️ Are you sure you want to permanently delete your account? This cannot be undone.")) return;
+
+    try {
+      const res = await fetch("http://localhost:3000/api/auth/delete-account", {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        alert("✅ Account deleted successfully. Redirecting...");
+        localStorage.clear();
+        window.location.href = "YouHealthHomepage.html";
+      } else {
+        alert("❌ " + (result.error || "Delete failed"));
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert("⚠️ Server error. Try again later.");
+    }
+  });
+});
+</script>
+
+
+</body>
+</html>
+
