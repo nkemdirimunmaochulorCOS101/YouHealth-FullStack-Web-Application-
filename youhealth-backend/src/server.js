@@ -20,7 +20,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
 FRONTEND_URL="https://serene-brioche-caa2a5.netlify.app/"
 
 app.use(cors({
-  origin: "https://serene-brioche-caa2a5.netlify.app/", // your Netlify link
+  origin: "https://joyful-fenglisu-a6957c.netlify.app/", // your Netlify link
   methods: "GET,POST,PUT,DELETE",
   credentials: true
 }));
@@ -149,6 +149,19 @@ function generateToken(userId) {
     { expiresIn: "1d" }
   );
 }
+
+// Get all users (admin only)
+app.get("/api/users", authenticateToken, async (req, res) => {
+  if (req.user.role !== "ADMIN") {
+    return res.status(403).json({ error: "Unauthorized" });
+  }
+  const users = await prisma.user.findMany({
+    select: { id: true, firstName: true, lastName: true, email: true, role: true }
+  });
+  res.json(users);
+});
+
+
 
 // ========================
 // Test Routes
