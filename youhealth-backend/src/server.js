@@ -90,34 +90,32 @@ passport.use(new GoogleStrategy({
 }));
 
 
-// Google Login route
-app.get("/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+// Google Auth Routes
+app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
-// Google Callback
 app.get(
   "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "http://localhost:5500/Loginpage.html" }),
-  (req, res) => {
+  passport.authenticate("google", { failureRedirect: `${FRONTEND_URL}/Loginpage.html` }),
+  async (req, res) => {
+    const user = req.user;
+
+    // Generate JWT
     const token = jwt.sign(
-      { userId: req.user.id, email: req.user.email, role: req.user.role },
+      { userId: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "1h" }
     );
 
-    const safeUser = {
-      id: req.user.id,
-      email: req.user.email,
-      firstName: req.user.firstName || req.user.fullName,
-      role: req.user.role
-    };
-
+    // Redirect to frontend with token
+    const safeUser = { id: user.id, email: user.email, role: user.role };
     res.redirect(
-      `http://localhost:5500/Healthdashboard.html?token=${token}&user=${encodeURIComponent(JSON.stringify(safeUser))}`
+      `${FRONTEND_URL}/Healthdashboard.html?token=${token}&user=${encodeURIComponent(
+        JSON.stringify(safeUser)
+      )}`
     );
   }
 );
+
 
 
 
@@ -793,34 +791,30 @@ app.delete("/api/auth/delete-account", authenticateToken, async (req, res) => {
 // Forgot Password
 const sendEmail = require("../src/services/email"); // adjust path
 
-app.post("/auth/forgot-password", async (req, res) => {
+// Forgot Password Example (TODO: Save resetToken + expiry in DB properly)
+app.post("/api/auth/forgot-password", async (req, res) => {
+  const { email } = req.body;
   try {
-    const { email } = req.body;
-
-    // 1️⃣ Check if user exists
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-    // 2️⃣ Generate reset token (valid for 1 hour)
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "15m" });
 
-    // 3️⃣ Build reset link
-    const resetLink = `http://localhost:5500/Loginpage.html?resetToken=${token}`;
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        resetToken: token,
+        resetTokenExpiry: new Date(Date.now() + 15 * 60 * 1000), // 15 mins
+      },
+    });
 
-    // 4️⃣ For now: just log reset link to console
-    console.log("📩 Password reset link:", resetLink);
-
-    // 5️⃣ Respond to frontend
-    res.json({ message: "Password reset link generated. Check your server console for the link." });
-
+    // Redirect link points to Netlify login page
+    const resetLink = `${FRONTEND_URL}/Loginpage.html?resetToken=${token}`;
+    res.json({ message: "Password reset link generated", resetLink });
   } catch (err) {
-    console.error("Forgot password error:", err);
-    res.status(500).json({ error: "Failed to generate reset link" });
+    res.status(500).json({ error: "Something went wrong" });
   }
 });
-
 
 // Reset Password
 app.post("/auth/reset-password", async (req, res) => {
