@@ -10,11 +10,21 @@ const session = require("express-session");
 const passport = require("passport");
 const { Strategy: GoogleStrategy } = require("passport-google-oauth20");
 
+
+
 const app = express();
 module.exports = app;
 const prisma = new PrismaClient();
 const PORT = process.env.PORT || 5000; // ⚡ changed to 5000 so frontend can run on 3000
 const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
+
+
+app.use(cors({
+  origin: "https://serene-brioche-caa2a5.netlify.app/", // your Netlify link
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true
+}));
+
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST, // e.g., smtp.gmail.com
