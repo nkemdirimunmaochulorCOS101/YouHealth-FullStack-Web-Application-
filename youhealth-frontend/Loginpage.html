@@ -37,6 +37,7 @@ body::before {
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
 <div class="max-w-md w-full">
+
     <!-- Logo -->
     <div class="flex items-center justify-center mb-8 slide-in-card">
         <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="h-10 w-10 mr-4 rounded-lg drop-shadow-lg">
@@ -44,73 +45,62 @@ body::before {
     </div>
 
     <!-- Login Card -->
-<div class="bg-white rounded-xl shadow-2xl p-8 slide-in-card relative">
-    <h3 class="text-2xl font-semibold text-center text-gray-800 mb-6">Log In</h3>
-    <p id="login-message" class="text-center mb-4 text-sm font-medium"></p>
+    <div class="bg-white rounded-xl shadow-2xl p-8 slide-in-card relative">
+        <h3 class="text-2xl font-semibold text-center text-gray-800 mb-6">Log In</h3>
+        <p id="login-message" class="text-center mb-4 text-sm font-medium"></p>
 
-    <form id="login-form" class="space-y-5">
-        <input type="text" id="login-email" placeholder="Enter Email" 
-               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <input type="password" id="login-password" placeholder="Enter Password" 
-               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <button type="submit" 
-                class="w-full py-2.5 px-4 rounded-lg bg-blue-900 text-white font-semibold hover:bg-blue-700 transition duration-300">
-            Log In
+        <form id="login-form" class="space-y-5">
+            <input type="email" id="login-email" placeholder="Enter Email" 
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="password" id="login-password" placeholder="Enter Password" 
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button type="submit" 
+                    class="w-full py-2.5 px-4 rounded-lg bg-blue-900 text-white font-semibold hover:bg-blue-700 transition duration-300">
+                Log In
+            </button>
+        </form>
+
+        <!-- OR Divider -->
+        <div class="flex items-center my-4">
+            <hr class="flex-grow border-gray-300">
+            <span class="px-2 text-gray-500 text-sm">OR</span>
+            <hr class="flex-grow border-gray-300">
+        </div>
+
+        <!-- Google Login Button -->
+        <button id="google-login-btn"
+           class="w-full py-2.5 px-4 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition duration-300 block text-center">
+           Continue with Google
         </button>
-    </form>
 
-    <!-- OR Divider -->
-    <div class="flex items-center my-4">
-        <hr class="flex-grow border-gray-300">
-        <span class="px-2 text-gray-500 text-sm">OR</span>
-        <hr class="flex-grow border-gray-300">
-    </div>
-
-    <!-- Google Login Button -->
-    <button id="google-login-btn"
-       class="w-full py-2.5 px-4 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition duration-300 block text-center">
-       Continue with Google
-    </button>
-
-    <div class="flex justify-between mt-4 text-sm">
-        <button id="forgot-password-btn" class="text-blue-600 hover:underline">Forgot Password?</button>
-        <a href="Whoareyoupage.html" class="text-gray-600 hover:text-blue-600">Sign Up</a>
-    </div>
-</div>
-
-<!-- Forgot Password Modal -->
-<div id="forgot-password-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
-    <div class="bg-white rounded-xl p-6 w-full max-w-sm relative">
-        <h4 class="text-lg font-semibold mb-4">Reset Password</h4>
-        <p class="text-sm text-gray-600 mb-4">Enter your email to receive password reset instructions.</p>
-        <input type="email" id="reset-email" placeholder="Enter your email" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <div class="flex justify-end space-x-2">
-            <button id="close-modal" class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400">Cancel</button>
-            <button id="submit-reset" class="px-4 py-2 rounded-lg bg-blue-900 text-white hover:bg-blue-700">Send</button>
+        <div class="flex justify-between mt-4 text-sm">
+            <button id="forgot-password-btn" class="text-blue-600 hover:underline">Forgot Password?</button>
+            <a href="Whoareyoupage.html" class="text-gray-600 hover:text-blue-600">Sign Up</a>
         </div>
     </div>
-</div>
 
-<!-- ✅ Reset Password Modal -->
-<div id="new-password-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
-    <div class="bg-white rounded-xl p-6 w-full max-w-sm relative">
-        <h4 class="text-lg font-semibold mb-4">Set New Password</h4>
-        <p class="text-sm text-gray-600 mb-4">Enter your new password below.</p>
-        <input type="password" id="new-password" placeholder="New Password" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <input type="password" id="confirm-password" placeholder="Confirm Password" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <div class="flex justify-end space-x-2">
-            <button id="close-newpass" class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400">Cancel</button>
-            <button id="submit-newpass" class="px-4 py-2 rounded-lg bg-blue-900 text-white hover:bg-blue-700">Update</button>
+    <!-- Forgot Password Modal -->
+    <div id="forgot-password-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+        <div class="bg-white rounded-xl p-6 w-full max-w-sm relative">
+            <h4 class="text-lg font-semibold mb-4">Reset Password</h4>
+            <p class="text-sm text-gray-600 mb-4">Enter your email to receive password reset instructions.</p>
+            <input type="email" id="reset-email" placeholder="Enter your email" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="flex justify-end space-x-2">
+                <button id="close-modal" class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400">Cancel</button>
+                <button id="submit-reset" class="px-4 py-2 rounded-lg bg-blue-900 text-white hover:bg-blue-700">Send</button>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
+const API_BASE = "https://youhealth-fullstack-web-application.onrender.com";
+
 // Login Form
 document.getElementById("login-form").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const email = document.getElementById("login-email").value;
-    const password = document.getElementById("login-password").value;
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value.trim();
     const messageElement = document.getElementById("login-message");
     messageElement.textContent = '';
     document.querySelectorAll('input').forEach(input => input.classList.remove('input-error'));
@@ -124,7 +114,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     }
 
     try {
-        const res = await fetch("http://localhost:3000/auth/login", {
+        const res = await fetch(`${API_BASE}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password })
@@ -137,9 +127,9 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
             messageElement.style.color = "green";
             setTimeout(() => {
                 window.location.href = result.user.role === "PATIENT" ? "Healthdashboard.html" : "MedicsDashboard.html";
-            }, 1200);
+            }, 1000);
         } else {
-            messageElement.textContent = result.message || "Login failed.";
+            messageElement.textContent = result.message || result.error || "Login failed.";
             messageElement.style.color = "red";
         }
     } catch (err) {
@@ -149,96 +139,36 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     }
 });
 
-// Modal Controls
+// Forgot Password Modal
 const modal = document.getElementById("forgot-password-modal");
 document.getElementById("forgot-password-btn").addEventListener("click", () => modal.classList.remove("hidden"));
 document.getElementById("close-modal").addEventListener("click", () => modal.classList.add("hidden"));
 
-// Submit Forgot Password
 document.getElementById("submit-reset").addEventListener("click", async () => {
     const email = document.getElementById("reset-email").value.trim();
-
-    if (!email) {
-        alert("Email is required.");
-        return;
-    }
+    if (!email) return alert("Email is required.");
 
     try {
-        const res = await fetch("http://localhost:3000/auth/forgot-password", {
+        const res = await fetch(`${API_BASE}/auth/forgot-password`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email })
         });
-
         const result = await res.json();
-
-        if (res.ok) {
-            alert(result.message || "✅ Password reset instructions sent to your email!");
-            modal.classList.add("hidden");
-        } else {
-            alert(result.error || "❌ Failed to send password reset instructions.");
-        }
+        alert(res.ok ? (result.message || "✅ Password reset instructions sent.") : (result.error || "❌ Failed to send instructions."));
+        if (res.ok) modal.classList.add("hidden");
     } catch (err) {
-        console.error("Forgot password error:", err);
+        console.error(err);
         alert("⚠️ Error connecting to the server. Please try again.");
-    }
-});
-
-// ✅ Reset Password Modal Logic
-const newPassModal = document.getElementById("new-password-modal");
-document.getElementById("close-newpass").addEventListener("click", () => newPassModal.classList.add("hidden"));
-
-// ✅ Capture reset token from URL
-document.addEventListener("DOMContentLoaded", () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const resetToken = urlParams.get("resetToken");
-    if (resetToken) {
-        newPassModal.classList.remove("hidden"); // show new password modal
-    }
-});
-
-document.getElementById("submit-newpass").addEventListener("click", async () => {
-    const newPassword = document.getElementById("new-password").value.trim();
-    const confirmPassword = document.getElementById("confirm-password").value.trim();
-    const urlParams = new URLSearchParams(window.location.search);
-    const resetToken = urlParams.get("resetToken");
-
-    if (!newPassword || !confirmPassword) {
-        alert("All fields are required.");
-        return;
-    }
-    if (newPassword !== confirmPassword) {
-        alert("Passwords do not match.");
-        return;
-    }
-
-    try {
-        const res = await fetch("http://localhost:3000/auth/reset-password", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ token: resetToken, password: newPassword })
-        });
-
-        const result = await res.json();
-        if (res.ok) {
-            alert(result.message || "✅ Password updated successfully! You can now log in.");
-            newPassModal.classList.add("hidden");
-            window.location.href = "Login.html";
-        } else {
-            alert(result.error || "❌ Failed to update password.");
-        }
-    } catch (err) {
-        console.error("Reset password error:", err);
-        alert("⚠️ Error connecting to the server.");
     }
 });
 
 // Google Login
 document.getElementById("google-login-btn").addEventListener("click", () => {
-    window.location.href = "http://localhost:3000/auth/google";
+    window.location.href = `${API_BASE}/auth/google`;
 });
 
-// ✅ Capture Google redirect response (?token & ?user in URL)
+// Handle Google OAuth Redirect
 document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
@@ -249,10 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const parsedUser = JSON.parse(decodeURIComponent(user));
             localStorage.setItem("token", token);
             localStorage.setItem("loggedInUser", JSON.stringify(parsedUser));
-
-            window.location.href = parsedUser.role === "PATIENT"
-                ? "Healthdashboard.html"
-                : "MedicsDashboard.html";
+            window.location.href = parsedUser.role === "PATIENT" ? "Healthdashboard.html" : "MedicsDashboard.html";
         } catch (err) {
             console.error("Google login parse error:", err);
         }
@@ -261,3 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
+
+

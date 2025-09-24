@@ -164,7 +164,7 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
   const data = { firstName, lastName, username, email, password, role: "PRACTITIONER", specialty };
 
   try {
-    const res = await fetch("http://localhost:3000/api/auth/register", {
+    const res = await fetch("https://youhealth-fullstack-web-application.onrender.com/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
@@ -191,4 +191,3 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
 
 </body>
 </html>
-

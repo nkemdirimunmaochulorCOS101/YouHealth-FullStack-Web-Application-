@@ -48,12 +48,15 @@
 
 <header class="bg-white shadow-sm sticky top-0 z-50">
   <div class="flex items-center justify-between max-w-7xl mx-auto px-4 py-2 md:px-6">
+    <!-- Logo -->
     <div class="flex items-center space-x-2">
       <img src="istockphoto-1321617070-612x612-removebg-preview.png"
            onerror="this.onerror=null;this.src='https://placehold.co/40x40/e2e8f0/4b5563?text=YH';"
            alt="YouHealth Logo" class="h-10 w-10 rounded-xl">
-      <a href="YouHealthHomepage.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer">YouHealth</a>
+      <a href="index.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer">YouHealth</a>
     </div>
+
+    <!-- Desktop Nav -->
     <nav class="hidden md:flex flex-1 justify-center space-x-8">
       <a href="Healthdashboard.html" class="font-medium text-gray-600 hover:text-blue-900 transition duration-300">Dashboard</a>
       <a href="#Search.Page" class="font-bold text-blue-900 hover:text-blue-900 transition duration-300">Search</a>
@@ -61,9 +64,30 @@
       <a href="Medicationspage.html" class="font-medium text-gray-900 hover:text-blue-900 transition duration-300">Medications</a>
       <a href="Settings.html" class="font-medium text-gray-900 hover:text-blue-900 transition duration-300">Settings</a>
     </nav>
+
+    <!-- Right side (desktop) -->
     <div class="flex items-center space-x-4">
       <button id="sign-out-desktop" class="hidden md:block px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105 text-sm">Log Out</button>
+      
+      <!-- Hamburger (mobile) -->
+      <button id="hamburger-btn" class="md:hidden flex flex-col space-y-1.5 focus:outline-none">
+        <span class="block w-6 h-0.5 bg-gray-800"></span>
+        <span class="block w-6 h-0.5 bg-gray-800"></span>
+        <span class="block w-6 h-0.5 bg-gray-800"></span>
+      </button>
     </div>
+  </div>
+
+  <!-- Mobile Nav -->
+  <div id="mobile-menu" class="hidden md:hidden bg-white shadow-md">
+    <nav class="flex flex-col space-y-2 px-6 py-4">
+      <a href="Healthdashboard.html" class="font-medium text-gray-600 hover:text-blue-900">Dashboard</a>
+      <a href="#Search.Page" class="font-bold text-blue-900 hover:text-blue-900">Search</a>
+      <a href="Appointmentspage.html" class="font-medium text-gray-900 hover:text-blue-900">Appointments</a>
+      <a href="Medicationspage.html" class="font-medium text-gray-900 hover:text-blue-900">Medications</a>
+      <a href="Settings.html" class="font-medium text-gray-900 hover:text-blue-900">Settings</a>
+      <button id="sign-out-mobile" class="px-4 py-2 rounded-lg bg-blue-900 text-white font-semibold">Log Out</button>
+    </nav>
   </div>
 </header>
 
@@ -170,7 +194,7 @@ let allPractitioners = [];
 
 async function fetchPractitioners() {
   try {
-    const res = await fetch("http://localhost:3000/practitioners", {
+    const res = await fetch("https://youhealth-fullstack-web-application.onrender.com/practitioners", {
       headers: { "Authorization": `Bearer ${token}` }
     });
     if (!res.ok) throw new Error("Failed to fetch practitioners");
@@ -291,6 +315,13 @@ function closeProfileModal() {
   content.classList.add("opacity-0", "scale-95");
   setTimeout(() => modal.classList.add("hidden"), 300);
 }
+
+// Hamburger menu toggle
+const hamburgerBtn = document.getElementById("hamburger-btn");
+const mobileMenu = document.getElementById("mobile-menu");
+hamburgerBtn.addEventListener("click", () => {
+  mobileMenu.classList.toggle("hidden");
+});
 
 // --- Search filter ---
 document.getElementById("doctor-search").addEventListener("input", (e) => {

@@ -60,18 +60,18 @@
         <div class="flex items-center justify-between max-w-7xl mx-auto px-4 py-2 md:px-6">
             <div class="flex items-center space-x-2">
                 <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="h-10 w-10 rounded-xl">
-                <a href="YouHealthHomepage.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer drop-shadow-sm">YouHealth</a>
+                <a href="index.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer drop-shadow-sm">YouHealth</a>
             </div>
             <nav class="hidden md:flex flex-1 justify-center space-x-8">
                 <a href="Healthdashboard.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Dashboard</a>
                 <a href="SearchPage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Search</a>
-                <a href="£Appointmentspage.page" class="nav-link font-bold text-blue-900 hover:text-blue-900 transition duration-300 active">Appointments</a>
+                <a href="#Appointmentspage.page" class="nav-link font-bold text-blue-900 hover:text-blue-900 transition duration-300 active">Appointments</a>
                 <a href="Medicationspage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Medications</a>
                 <a href="Settings.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Settings</a>
             </nav>
 
             <div class="flex items-center space-x-4">
-                <a href="YouHealthHomepage.html" 
+                <a href="index.html" 
    class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105 text-sm hidden md:block">
    Log Out
 </a>
@@ -92,7 +92,7 @@
                 <a href="#Appointmentspage" class="nav-link font-bold text-blue-900 hover:text-blue-900 transition duration-300 active">Appointments</a>
                 <a href="Medicationspage.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Medications</a>
                 <a href="Settings.html" class="nav-link font-medium text-gray-600 hover:text-blue-900 transition duration-300">Settings</a>
-                <a href="YouHealthHomepage.html" 
+                <a href="index.html" 
    class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105 text-sm hidden md:block">
    Log Out
 </a>
@@ -211,7 +211,7 @@
     </footer>
 
     <script>
-const API_BASE = "http://localhost:3000";
+const API_BASE = "https://youhealth-fullstack-web-application.onrender.com";
 const token = localStorage.getItem("token");
 const notificationLeadMinutes = 30;
 const scheduledNotifications = new Map();
@@ -598,6 +598,14 @@ document.getElementById("appointment-search").addEventListener("input", async (e
     console.error("Search error:", err);
   }
 });
+
+// Hamburger menu toggle
+const hamburgerBtn = document.getElementById("mobile-menu-button");
+const mobileMenu = document.getElementById("mobile-menu");
+hamburgerBtn.addEventListener("click", () => {
+  mobileMenu.classList.toggle("hidden");
+});
+
 
 document.addEventListener("DOMContentLoaded", () => { fetchAppointments(); });
   </script>

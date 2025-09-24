@@ -38,7 +38,7 @@
     <div class="flex items-center justify-between max-w-7xl mx-auto px-4 py-2 md:px-6">
       <div class="flex items-center space-x-2">
         <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="h-10 w-10 rounded-xl"/>
-        <a href="YouHealthHomepage.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer drop-shadow-sm">YouHealth</a>
+        <a href="index.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer drop-shadow-sm">YouHealth</a>
       </div>
       <nav class="hidden md:flex flex-1 justify-center space-x-8">
         <a href="#home-page" class="nav-link font-bold text-blue-900 active">Dashboard</a>
@@ -48,7 +48,7 @@
         <a href="Settings.html" class="nav-link font-medium text-gray-600 hover:text-blue-900">Settings</a>
       </nav>
       <div class="flex items-center space-x-4">
-        <a href="YouHealthHomepage.html" 
+        <a href="index.html" 
    class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105 text-sm hidden md:block">
    Log Out
 </a>
@@ -66,7 +66,7 @@
       <a href="Appointmentspage.html" class="block px-4 py-2 nav-link font-medium text-gray-600 hover:text-blue-900">Appointments</a>
       <a href="Medicationspage.html" class="block px-4 py-2 nav-link font-medium text-gray-600 hover:text-blue-900">Medications</a>
       <a href="Settings.html" class="block px-4 py-2 nav-link font-medium text-gray-600 hover:text-blue-900">Settings</a>
-      <a href="YouHealthHomepage.html" 
+      <a href="index.html" 
    class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white font-semibold bg-blue-900 hover:bg-blue-900 transition duration-300 transform hover:scale-105 text-sm hidden md:block">
    Log Out
 </a>
@@ -155,7 +155,7 @@
     if (!token) return;
 
     try {
-      const res = await fetch("http://localhost:3000/me", {
+      const res = await fetch("https://youhealth-fullstack-web-application.onrender.com/me", {
         headers: { 
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
@@ -192,7 +192,7 @@
       return;
     }
     try {
-      const res = await fetch(`http://localhost:3000/medications?patientId=${loggedInUser.id}`, {
+      const res = await fetch(`https://youhealth-fullstack-web-application.onrender.com/medications?patientId=${loggedInUser.id}`, {
         headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" }
       });
       if (!res.ok) throw new Error("Failed to fetch medications");
@@ -288,7 +288,7 @@
     const token = localStorage.getItem("token");
     if(!token) return;
     try {
-      const res = await fetch(`http://localhost:3000/appointments?patientId=${loggedInUser.id}`, {
+      const res = await fetch(`https://youhealth-fullstack-web-application.onrender.com/appointments?patientId=${loggedInUser.id}`, {
         headers:{ "Authorization": `Bearer ${token}`, "Content-Type": "application/json" }
       });
       if(!res.ok) throw new Error("Failed to fetch appointments");

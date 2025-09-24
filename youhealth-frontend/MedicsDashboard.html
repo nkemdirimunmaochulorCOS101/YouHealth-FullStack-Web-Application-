@@ -34,7 +34,7 @@
   <!-- Logo -->
   <div class="flex items-center space-x-2">
     <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="h-10 w-10 rounded-xl">
-    <a href="YouHealthHomepage.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer">YouHealth</a>
+    <a href="index.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer">YouHealth</a>
   </div>
 
   <!-- Desktop nav (centered) -->
@@ -43,6 +43,7 @@
     <a href="Medicspatientpage.html" class="nav-link">Patients</a>
     <a href="MedicsSchedulepage.html" class="nav-link">Tasks</a>
     <a href="MedicsSettingspage.html" class="nav-link">Settings</a>
+
   </nav>
 
   <!-- Right section -->
@@ -71,7 +72,7 @@
                 <a href="Medicspatientpage.html" class="nav-link text-lg font-medium text-gray-600 hover:text-blue-900 transition duration-300">Patients</a>
                 <a href="MedicsSchedulepage.html" class="nav-link text-lg font-medium text-gray-600 hover:text-blue-900 transition duration-300">Tasks</a>
                 <a href="MedicsSettingspage.html" class="nav-link text-lg font-medium text-gray-600 hover:text-blue-900 transition duration-300">Settings</a>
-                <button class="w-full text-center text-lg font-medium py-2 px-4 rounded-full text-white bg-blue-900 hover:bg-blue-700 transition duration-300 mt-4">Log Out</button>
+                <button id="sign-out-btn" class="w-full text-center text-lg font-medium py-2 px-4 rounded-full text-white bg-blue-900 hover:bg-blue-700 transition duration-300 mt-4">Log Out</button>
             </nav>
         </div>
 
@@ -124,7 +125,7 @@
 </div>
 
 <script type="module">
-const API_BASE = "http://localhost:3000";
+const API_BASE = "https://youhealth-fullstack-web-application.onrender.com";
 let allAppointments = [];
 let currentFilter = "ALL";
 
@@ -299,6 +300,15 @@ async function searchPatients(query) {
     searchResults.innerHTML = `<div class="text-sm text-red-500">Search failed — check console.</div>`;
   }
 }
+
+document.getElementById("sign-out-btn").addEventListener("click", () => {
+  // optional: clear localStorage if you store tokens
+  localStorage.removeItem("token");
+  localStorage.removeItem("loggedInUser");
+
+  // redirect to homepage
+  window.location.href = "index.html";
+} )
 
 // Initialize
 fetchAppointments();

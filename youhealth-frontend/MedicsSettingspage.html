@@ -17,11 +17,11 @@
         <div class="flex items-center justify-between max-w-7xl mx-auto px-4 py-2 md:px-6">
             <div class="flex items-center space-x-2">
                 <img src="istockphoto-1321617070-612x612-removebg-preview.png" onerror="this.onerror=null;this.src='https://placehold.co/40x40/e2e8f0/4b5563?text=YH';" alt="YouHealth Logo" class="h-10 w-10 rounded-xl">
-                <a href="YouHealthHomepage.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer">YouHealth</a>
+                <a href="index.html" class="text-xl md:text-2xl font-extrabold tracking-wide text-blue-900 cursor-pointer">YouHealth</a>
             </div>
 
             <nav class="hidden md:flex flex-1 justify-center space-x-8">
-                <a href="Healthdashboard.html" class="font-medium text-gray-600 hover:text-blue-900 transition duration-300">Dashboard</a>
+                <a href="MedicsDashboard.html" class="font-medium text-gray-600 hover:text-blue-900 transition duration-300">Dashboard</a>
                 <a href="Medicspatientpage.html" class="font-medium text-gray-600 hover:text-blue-900 transition duration-300">Patients</a>
                 <a href="Medicspatientpage.html" class="font-medium text-gray-900 hover:text-blue-900 transition duration-300">Tasks</a>
                 <a href="#Settings.html" class="font-bold text-blue-900 hover:text-blue-900 transition duration-300">Settings</a>
@@ -42,7 +42,7 @@
     <!-- ✅ Mobile Menu -->
     <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg z-40 transition-transform transform duration-300 ease-in-out">
         <div class="flex flex-col items-center py-4 space-y-2">
-            <a href="Healthdashboard.html" class="w-full text-center py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Dashboard</a>
+            <a href="MedicsDashboard.html" class="w-full text-center py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Dashboard</a>
             <a href="Medicspatientpage.html" class="w-full text-center py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Patients</a>
             <a href="Medicspatientpage.html" class="font-medium text-gray-900 hover:text-blue-900 transition duration-300">Tasks</a>
             <a href="#Settings.html" class="w-full text-center py-2 text-blue-900 font-bold bg-gray-100 rounded-lg">Settings</a>
@@ -117,6 +117,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   const deleteBtn = document.getElementById("deleteBtn");
   const profilePreview = document.getElementById("profilePreview");
   const profileInput = document.getElementById("profileImage");
+  const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  // 🔽 Hamburger Menu Toggle
+  mobileMenuBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
 
   // 1️⃣ Get token from URL or localStorage
   let token = localStorage.getItem("token");
@@ -135,7 +142,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // 2️⃣ Load user profile
   async function loadUserProfile() {
     try {
-      const res = await fetch("http://localhost:3000/api/user/me", {
+      const res = await fetch("https://youhealth-fullstack-web-application.onrender.com/api/user/me", {
         headers: { "Authorization": `Bearer ${token}` }
       });
 
@@ -203,7 +210,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (profileFile) formData.append("profileImage", profileFile);
 
     try {
-      const res = await fetch("http://localhost:3000/api/user/update", {
+      const res = await fetch("https://youhealth-fullstack-web-application.onrender.com/api/user/update", {
         method: "PUT",
         headers: { "Authorization": `Bearer ${token}` },
         body: formData
@@ -231,7 +238,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!confirm("⚠️ Are you sure you want to permanently delete your account? This cannot be undone.")) return;
 
     try {
-      const res = await fetch("http://localhost:3000/api/auth/delete-account", {
+      const res = await fetch("https://youhealth-fullstack-web-application.onrender.com/api/auth/delete-account", {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });
@@ -241,7 +248,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (res.ok) {
         alert("✅ Account deleted successfully. Redirecting...");
         localStorage.clear();
-        window.location.href = "YouHealthHomepage.html";
+        window.location.href = "index.html";
       } else {
         alert("❌ " + (result.error || "Delete failed"));
       }
@@ -256,4 +263,3 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 </body>
 </html>
-

@@ -94,7 +94,7 @@ document.getElementById("details-form").addEventListener("submit", async (e) => 
   const data = { qualifications, phone, address, about, availableTime };
 
   try {
-    const res = await fetch(`http://localhost:3000/api/users/${user.id}/details`, {
+    const res = await fetch(`https://youhealth-fullstack-web-application.onrender.com/api/users/${user.id}/details`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

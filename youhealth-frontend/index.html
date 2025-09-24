@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>YouHealth - Home</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* General Styles */
+        :root {
+            --brand: #1e3a8a; /* darker blue */
+            --secondary-brand: #162b66; /* even darker shade */
+            --muted: #6b7280;
+            --bg: #f7f8fa;
+            --panel-bg: rgba(255, 255, 255, 0.95);
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            scroll-behavior: smooth;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            height: 100%;
+            background: var(--bg);
+            color: #07103a;
+        }
+
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(43, 96, 220, 0.151);
+            padding: 5px 20px;
+        }
+
+        .header-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .branding {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo {
+            height: 45px;
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .branding h1 {
+            font-size: 1.5rem;
+            color: var(--brand);
+            margin: 0;
+        }
+
+        /* Main Navigation */
+        .main-nav {
+            flex-grow: 1;
+            text-align: center;
+        }
+        
+        .main-nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 30px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-nav a {
+            text-decoration: none;
+            color: #555;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        .main-nav a:hover {
+            color: var(--brand);
+        }
+
+        .main-nav a.active {
+    color: var(--brand);
+    border-bottom: 2px solid var(--brand);
+    padding-bottom: 2px;
+}
+
+        
+        /* Auth Links */
+        .auth-links {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .auth-links button {
+            background-color: var(--brand);
+            color: var(--bg);
+            height: 30px;
+            width: 75px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .auth-links button:last-child {
+            background-color: transparent;
+            color: var(--brand);
+            border: 1px solid var(--brand);
+        }
+
+        .auth-links button:last-child:hover {
+            background-color: var(--brand);
+            color: var(--bg);
+        }
+        
+        .auth-links button:hover:not(:last-child) {
+            background-color: var(--secondary-brand);
+        }
+        
+        /* Hamburger menu button (updated for uniformity) */
+        .hamburger-menu {
+            display: none;
+            cursor: pointer;
+            font-size: 1.8rem;
+            color: var(--brand);
+            background: none;
+            border: none;
+            padding: 6px;
+        }
+        
+        /* Side Navigation */
+        .side-nav {
+            position: fixed;
+            top: 0;
+            right: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: var(--panel-bg);
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease-in-out;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .side-nav.open {
+            right: 0;
+        }
+
+        .side-nav .close-menu {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--muted);
+        }
+        
+        .side-nav ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 40px;
+        }
+        
+        .side-nav li {
+            margin-bottom: 20px;
+        }
+        
+        .side-nav a {
+            text-decoration: none;
+            color: #555;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: block;
+        }
+
+        .side-nav .auth-links-mobile {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .side-nav .auth-links-mobile button {
+            width: 100%;
+            height: 40px;
+            border-radius: 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1400px;
+            margin: 8px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: stretch;
+            box-shadow: 0 12px 36px rgba(8, 15, 30, 0.08);
+        }
+        
+        .hero-media {
+            flex: 1;
+            background-size: cover;
+            background-position: center;
+            min-height: 86vh;
+            position: relative;
+        }
+        
+        .hero-media::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(2, 6, 23, 0.08), rgba(2, 6, 23, 0.02));
+            pointer-events: none;
+        }
+
+        .hero-panel {
+            width: 340px;
+            background: var(--panel-bg);
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            text-align: center; 
+        }
+
+        .hero-panel h1 {
+            margin: 0;
+            font-size: 1.35rem;
+        }
+
+        .hero-panel p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.45;
+        }
+
+        .cta {
+            display: inline-block;
+            margin-top: 8px;
+            background: var(--brand);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            width: fit-content;
+            transition: background-color 0.3s;
+        }
+        
+        .cta:hover {
+            background-color: var(--secondary-brand);
+        }
+
+        /* Services Section with Animation */
+        .services-section {
+            max-width: 1400px;
+            margin: 50px auto;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .services-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--brand);
+            margin-bottom: 40px;
+        }
+
+        .service-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 40px;
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+            opacity: 0;
+            transform: translateY(50px);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .service-container.active {
+            opacity: 1;
+            transform: translateY(0);
+            position: relative;
+        }
+        
+        .service-content {
+            flex: 1;
+            padding: 20px;
+            order: 1;
+        }
+        
+        .service-image {
+            flex: 1;
+            text-align: center;
+            order: 2;
+        }
+        
+        .service-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .service-container:nth-child(even) .service-content {
+            order: 2;
+        }
+        
+        .service-container:nth-child(even) .service-image {
+            order: 1;
+        }
+        
+        .service-content h3 {
+            font-size: 2rem;
+            color: var(--brand);
+            margin-bottom: 10px;
+        }
+        
+        .service-content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .service-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin: 0 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-dot.active {
+            background-color: var(--brand);
+        }
+
+        /* Footer */
+        footer {
+            max-width: 1400px;
+            margin: 18px auto;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 800;
+            color: var(--muted);
+        }
+
+        footer {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 880px) {
+            .hero {
+                flex-direction: column;
+            }
+
+            .hero-panel {
+                width: 100%;
+                position: relative;
+                padding: 18px;
+                border-radius: 0;
+            }
+
+            .hero-media {
+                min-height: 58vh;
+            }
+
+            header, footer {
+                margin: 12px;
+                padding: 10px;
+            }
+            
+            .service-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .service-content, .service-image {
+                order: 1 !important;
+                padding: 10px;
+            }
+            
+            .service-content h3 {
+                font-size: 1.5rem;
+            }
+            
+            .service-content p {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 880px) {
+            .header-wrapper {
+                justify-content: space-between;
+            }
+
+            .main-nav, .auth-links {
+                display: none;
+            }
+
+            .hamburger-menu {
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-wrapper">
+            <div class="branding">
+                <img src="istockphoto-1321617070-612x612-removebg-preview.png" alt="YouHealth Logo" class="header-logo">
+                <h1>YouHealth</h1>
+            </div>
+            <nav class="main-nav">
+    <ul>
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="Aboutus.html">About Us</a></li>
+        <li><a href="Services.html">Services</a></li>
+        <li><a href="Contactus.html">Contact</a></li>
+    </ul>
+</nav>
+
+
+            <div class="auth-links">
+                <a href="Whoareyoupage.html"><button class="btn bg-blue-600 hover:bg-blue-700">Sign Up</button></a>
+                <a href="Loginpage.html"><button>Log In</button></a>
+            </div>
+            <!-- Updated hamburger for uniformity -->
+            <button class="hamburger-menu" aria-controls="side-nav" aria-expanded="false" aria-label="Open navigation menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav class="side-nav" id="side-nav">
+            <button class="close-menu" aria-label="Close navigation menu">&times;</button>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="Aboutus.html">About Us</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="auth-links-mobile">
+                <a href="Whoareyoupage.html"><button>Sign Up</button></a>
+                <a href="Loginpage.html"><button>Log In</button></a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="hero" role="main" aria-labelledby="hero-title">
+        <div class="hero-media" style="background-image: url('ChatGPT Image Aug 12, 2025, 05_18_42 PM.jpeg');" role="img" aria-label="Doctor showing elderly patient how to use a tablet"></div>
+        <aside class="hero-panel" aria-labelledby="hero-title">
+            <h1 id="hero-title">Healthcare for the Elderly</h1>
+            <p>Track medications with a single tap. Reminders, telehealth and health monitoring made simple.</p>
+            <a class="cta" href="#services-section">Get Started</a>
+        </aside>
+    </main>
+
+    <section id="services-section" class="services-section">
+        <h2>Our Services</h2>
+        <div class="service-slides">
+            <article class="service-container active" aria-label="Medication Reminders">
+                <div class="service-content">
+                    <h3>Medication Reminders</h3>
+                    <p>Stay on track with your prescriptions. Our app sends you timely reminders and helps you manage your medication schedule, so you never miss a dose. It's the simple way to stay consistent with your health regimen.</p>
+                </div>
+                <div class="service-image">
+                    <img src="Gemini_Generated_Image_cqjk60cqjk60cqjk.png" alt="An illustration of a pill bottle with a clock icon, symbolizing medication reminders.">
+                </div>
+            </article>
+
+            <article class="service-container" aria-label="virtual Consultations">
+                <div class="service-content">
+                    <h3>Virtual Consultations</h3>
+                    <p>Connect with a doctor from the comfort of your home. Schedule and attend virtual appointments with ease, saving you time and travel. Our secure platform ensures your privacy and provides a seamless telehealth experience.</p>
+                </div>
+                <div class="service-image">
+                    <img src="Virtual Doctor Consultation with Elderly Woman.png" alt="An illustration of a doctor on a computer screen, representing telehealth consultations.">
+                </div>
+            </article>
+            
+            <article class="service-container" aria-label="Book Appointments">
+                <div class="service-content">
+                    <h3>Book Appointments</h3>
+                    <p>Allow users to book appointments and decide when, where and how the appointment will take place. Users can also check the details of their appointments and their appointment overview using filters.</p>
+                </div>
+                <div class="service-image">
+                    <img src="nnnn.png" alt="An illustration of two people holding hands, symbolizing caregiver support and access.">
+                </div>
+            </article>
+            
+            <article class="service-container" aria-label="Health Monitoring">
+                <div class="service-content">
+                    <h3>Health Monitoring</h3>
+                    <p>Track key health metrics like blood pressure, glucose levels, and heart rate. You can easily log data and share reports directly with your doctor. This allows for proactive health management and better-informed medical decisions.</p>
+                </div>
+                <div class="service-image">
+                    <img src="Gemini_Generated_Image_roniabroniabroni.png" alt="An illustration of a heart rate monitor and a chart, representing health data tracking.">
+                </div>
+            </article>
+        </div>
+        
+        <div class="service-nav">
+            <span class="nav-dot active" data-slide="0"></span>
+            <span class="nav-dot" data-slide="1"></span>
+            <span class="nav-dot" data-slide="2"></span>
+            <span class="nav-dot" data-slide="3"></span>
+        </div>
+    </section>
+
+    <footer>
+        <div>© 2025 YouHealth</div>
+        <div style="color:var(--muted);font-weight:600">Made simple • Privacy • Contact</div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.service-container');
+            const dots = document.querySelectorAll('.nav-dot');
+            let currentSlide = 0;
+            function showSlide(index) {
+                slides.forEach(slide => slide.classList.remove('active'));
+                dots.forEach(dot => dot.classList.remove('active'));
+                slides[index].classList.add('active');
+                dots[index].classList.add('active');
+            }
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            }
+            dots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const slideIndex = parseInt(dot.getAttribute('data-slide'));
+                    currentSlide = slideIndex;
+                    showSlide(currentSlide);
+                });
+            });
+            setInterval(nextSlide, 5000);
+            showSlide(currentSlide);
+
+            const hamburger = document.querySelector('.hamburger-menu');
+            const sideNav = document.querySelector('.side-nav');
+            const closeBtn = document.querySelector('.close-menu');
+
+            hamburger.addEventListener('click', () => {
+                sideNav.classList.add('open');
+            });
+
+            closeBtn.addEventListener('click', () => {
+                sideNav.classList.remove('open');
+            });
+
+            // Close side menu when a link is clicked
+            document.querySelectorAll('.side-nav a').forEach(link => {
+                link.addEventListener('click', () => {
+                    sideNav.classList.remove('open');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
