@@ -17,10 +17,10 @@ module.exports = app;
 const prisma = new PrismaClient();
 const PORT = process.env.PORT || 5000; // ⚡ changed to 5000 so frontend can run on 3000
 const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
-FRONTEND_URL="https://joyful-fenglisu-a6957c.netlify.app/"
+FRONTEND_URL="https://cool-paletas-a5be4a.netlify.app/"
 
 app.use(cors({
-  origin: "https://joyful-fenglisu-a6957c.netlify.app/", // your Netlify link
+  origin: "https://cool-paletas-a5be4a.netlify.app/", // your Netlify link
   methods: "GET,POST,PUT,DELETE",
   credentials: true
 }));
